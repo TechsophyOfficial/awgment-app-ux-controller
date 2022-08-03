@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: tp-app-ux-controller
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://keycloak-tsplatform.techsophy.com/auth/realms/techsophy-platform
+
+
+gateway:
+  uri:  https://api-gateway.techsophy.com/api
+keycloak:
+  issuer-uri: https://keycloak-tsplatform.techsophy.com/auth/realms/
+
+camunda-engine.servlet.context-path : /camunda
+
+springdoc:
+  api-docs:
+    path: workflow/v3/api-docs

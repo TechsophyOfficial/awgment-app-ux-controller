@@ -1,0 +1,69 @@
+package com.techsophy.tsf.wrapperservice.dto;
+
+import lombok.Data;
+
+import java.util.Map;
+
+@Data
+public class AllTaskFormVariablesDTO {
+    Map<String,Object> createComments;
+    Map<String,Object> mobileNumber;
+    Map<String,Object> payloadObj;
+    Map<String,Object> emailId;
+    Map<String,Object> lcpChecklistInstanceId;
+    Map<String,Object> convoId;
+    Map<String,Object> checklistInstanceStatus;
+    Map<String,Object> ticketNo;
+    Map<String,Object> checklistInstanceDetailsStatusCode;
+    Map<String,Object> transactionUpdateDetails;
+    Map<String,Object> nrOfActiveInstances;
+    Map<String,Object> transactionJson;
+    Map<String,Object> taskClaimedByUser;
+    Map<String,Object> partialfailTransactionStatus;
+    Map<String,Object> sla;
+    Map<String,Object> transactionUpdateStatusCode;
+    Map<String,Object> priority;
+    Map<String,Object> transactions;
+    Map<String,Object> priorityType;
+    Map<String,Object> encodedUrl;
+    Map<String,Object> fromReviewTicket;
+    Map<String,Object> invokeChecklistInstanceStatusCode;
+    Map<String,Object> firstName;
+    Map<String,Object> managerDecision;
+    Map<String,Object> transactionCollectionId;
+    Map<String,Object> delay;
+    Map<String,Object> reffererTransactionResponse;
+    Map<String,Object> assignee;
+    Map<String,Object> statusCode;
+    Map<String,Object> nrOfCompletedInstances;
+    Map<String,Object> status;
+    Map<String,Object> lastName;
+    Map<String,Object> transactionUpdateResponse;
+    Map<String,Object> submit;
+    Map<String,Object> closeTicket;
+    Map<String,Object> description;
+    Map<String,Object> invokeJourney;
+    Map<String,Object> moreInfo;
+    Map<String,Object> result;
+    Map<String,Object> processId;
+    Map<String,Object> runtimeFormId;
+    Map<String,Object> partialfailTransactionResponse;
+    Map<String,Object> transactionFormId;
+    Map<String,Object> checklistInstanceDetails;
+    Map<String,Object> decision;
+    Map<String,Object> transactionStatus;
+    Map<String,Object> reffererTransactionStatusCode;
+    Map<String,Object> ticketType;
+    Map<String,Object> loopCounter;
+    Map<String,Object> saveticketResponse;
+    Map<String,Object> transactionDate;
+    Map<String,Object> uri;
+    Map<String,Object> reviewTicket;
+    Map<String,Object> nrOfInstances;
+    Map<String,Object> sendToManager;
+    Map<String,Object> response;
+    Map<String,Object> businessKey;
+    Map<String,Object> ticketDescription;
+    Map<String,Object> user;
+    Map<String,Object> transaction;
+}

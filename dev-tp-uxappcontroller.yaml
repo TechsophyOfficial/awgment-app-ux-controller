@@ -1,0 +1,41 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: uxapp-controller
+  namespace: dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: uxapp-controller
+  template:
+    metadata:
+      labels:
+        name: uxapp-controller
+    spec:
+      containers:
+      - image: tsdevopsteam/platform:uxapp-controller-tp$BUILD_NUMBER
+        name: uxapp-controller
+        envFrom:
+        - configMapRef:
+            name: uxappcontroller-env
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: ts-platform
+        
+      
+      
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: uxapp-controller
+  namespace: dev
+spec:
+  type: ClusterIP
+  ports: 
+  - port: 8080
+  selector:
+    name: uxapp-controller
