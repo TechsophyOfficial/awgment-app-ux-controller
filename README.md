@@ -1,6 +1,6 @@
-# tp-app-ux-controller
+# awgment-app-ux-controller
 
-tp-app-ux-controller
+awgment-app-ux-controller
 
 
 Environment variables:
