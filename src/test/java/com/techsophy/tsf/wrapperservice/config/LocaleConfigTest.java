@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
-import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @ExtendWith(MockitoExtension.class)
@@ -52,7 +51,6 @@ class LocaleConfigTest {
         MessageSource messageSource1 = messageSource;
 
         MessageSource response = localeConfig.messageSource();
-        Assertions.assertNotNull(response);
         Assertions.assertEquals(response.getClass(), messageSource1.getClass());
     }
 }
