@@ -9,15 +9,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class LoggingTest {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    @Mock
+    Logger logger;
     @Mock
     JoinPoint joinPoint;
     @Mock
@@ -31,7 +31,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.beforeController(joinPoint);
-        verify(joinPoint, times(1)).getSignature();
+        verify(logger, times(1)).info(anyString());
     }
 
     @Test
@@ -39,7 +39,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.afterController(joinPoint);
-        verify(joinPoint, times(1)).getSignature();
+        verify(logger, times(1)).info(anyString());
     }
 
     @Test
@@ -47,7 +47,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.beforeService(joinPoint);
-        verify(joinPoint, times(1)).getSignature();
+        verify(logger, times(1)).info(anyString());
     }
 
     @Test
@@ -55,7 +55,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.afterService(joinPoint);
-        verify(joinPoint, times(1)).getSignature();
+        verify(logger, times(1)).info(anyString());
     }
 
     @Test
@@ -64,7 +64,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.logAfterThrowingController(joinPoint, exception);
-        verify(joinPoint, times(1)).getSignature();
+        verify(exception, times(1)).getMessage();
     }
 
     @Test
@@ -73,6 +73,6 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.logAfterThrowingService(joinPoint, exception);
-        verify(joinPoint, times(1)).getSignature();
+        verify(exception, times(1)).getMessage();
     }
 }

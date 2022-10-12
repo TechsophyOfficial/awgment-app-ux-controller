@@ -29,6 +29,6 @@ class SecurityConfigTest {
         Mockito.when(httpSecurity.authorizeRequests(any())).thenReturn(httpSecurity);
 
         securityConfig.configure(httpSecurity);
-        verify(httpSecurity, times(1)).authorizeRequests(any());
+        verify(httpSecurity, times(1)).oauth2ResourceServer(any());
     }
 }
