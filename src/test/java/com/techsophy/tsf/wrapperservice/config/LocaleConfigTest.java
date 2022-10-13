@@ -16,6 +16,9 @@ import java.util.Locale;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class LocaleConfigTest {
@@ -27,31 +30,29 @@ class LocaleConfigTest {
 
     @Test
     void resolveLocaleTest() {
-        Mockito.when(request.getHeader(any())).thenReturn("test");
-        Locale actualOutput = localeConfig.resolveLocale(request);
-        Locale expectedOutput = new Locale(request.getHeader(ACCEPT_LANGUAGE));
+        String actualOutput = localeConfig.resolveLocale(request).getLanguage();
+        String expectedOutput = "en";
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void resolveLocaleEmptyHeaderTest() {
-        Mockito.when(request.getHeader(any())).thenReturn("");
         Locale actualOutput = localeConfig.resolveLocale(request);
         Locale expectedOutput = Locale.US;
+
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void messageSourceTest() {
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        ReloadableResourceBundleMessageSource messageSource = Mockito.mock(ReloadableResourceBundleMessageSource.class);
 
         messageSource.setBasenames(BASENAME_ERROR_MESSAGES, BASENAME_MESSAGES);
         messageSource.setCacheMillis(CACHEMILLIS);
         messageSource.setDefaultEncoding(StandardCharsets.UTF_8.name());
         messageSource.setUseCodeAsDefaultMessage(USEDEFAULTCODEMESSAGE);
-        MessageSource messageSource1 = messageSource;
 
-        MessageSource response = localeConfig.messageSource();
-        Assertions.assertEquals(response.getClass(), messageSource1.getClass());
+        localeConfig.messageSource();
+        verify(messageSource, times(1)).setBasenames(anyString(), anyString());
     }
 }

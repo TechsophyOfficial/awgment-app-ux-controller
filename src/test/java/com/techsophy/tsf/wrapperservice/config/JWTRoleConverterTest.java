@@ -55,7 +55,7 @@ class JWTRoleConverterTest {
 
         Collection<GrantedAuthority> actualOutput = jwtRoleConverter.convert(jwt);
         Collection<GrantedAuthority> expectedOutput = (awgmentRolesList).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        Assertions.assertSame(expectedOutput.size(), actualOutput.size());
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
