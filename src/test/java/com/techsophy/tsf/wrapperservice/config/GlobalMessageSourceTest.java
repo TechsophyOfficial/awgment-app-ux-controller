@@ -21,20 +21,21 @@ class GlobalMessageSourceTest {
     @InjectMocks
     GlobalMessageSource globalMessageSource;
 
+    String key = "key";
+
     @Test
     void getSingleArgTest() {
-        Mockito.when(messageSource.getMessage(any(),any(),any())).thenReturn("key");
-        String actualOutput=globalMessageSource.get("key");
-        String expectedOutput = messageSource.getMessage("key", null, LocaleContextHolder.getLocale());
+        String expectedOutput = key;
+        Mockito.when(messageSource.getMessage(any(),any(),any())).thenReturn(expectedOutput);
+        String actualOutput=globalMessageSource.get(key);
         Assertions.assertSame(expectedOutput, actualOutput);
-
     }
 
     @Test
     void getDoubleArgTest() {
-        Mockito.when(messageSource.getMessage(any(),any(),any())).thenReturn("key");
-        String actualOutput = globalMessageSource.get("key", "ARG");
-        String expectedOutput = messageSource.getMessage("key", new Object[]{"ARG"}, LocaleContextHolder.getLocale());
+        String expectedOutput = key;
+        Mockito.when(messageSource.getMessage(any(),any(),any())).thenReturn(key);
+        String actualOutput = globalMessageSource.get(key, "ARG");
         Assertions.assertSame(expectedOutput, actualOutput);
     }
 }
