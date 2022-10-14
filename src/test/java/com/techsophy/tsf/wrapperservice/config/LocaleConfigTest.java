@@ -30,8 +30,8 @@ class LocaleConfigTest {
 
     @Test
     void resolveLocaleTest() {
-        String actualOutput = localeConfig.resolveLocale(request).getLanguage();
-        String expectedOutput = "en";
+        Locale actualOutput = localeConfig.resolveLocale(request);
+        Locale expectedOutput = Locale.US;
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
