@@ -26,7 +26,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static org.mockito.ArgumentMatchers.any;
+import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.CLIENT_ROLES;
+import static org.mockito.ArgumentMatchers.*;
 
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
@@ -67,5 +68,20 @@ class JWTRoleConverterTest {
         Mockito.when(webClientWrapper.webclientRequest(any(), any(), any(), any())).thenReturn(userResponce);
 
         Assertions.assertThrows(AccessDeniedException.class, () -> jwtRoleConverter.convert(jwt));
+    }
+
+    @Test
+    void convertTestWhileKeyAsClientRoles() throws JsonProcessingException {
+        Jwt jwt = Mockito.mock(Jwt.class);
+        List<String> awgmentRolesList = new ArrayList<>();
+        String userResponce = "userResponse";
+        Mockito.when(webClientWrapper.webclientRequest(any(), any(), any(), any())).thenReturn(userResponce);
+        Mockito.when(objectMapper.readValue(userResponce, Map.class)).thenReturn(Map.of("key", "val"));
+        Mockito.when(objectMapper.readValue(userResponce,Map.class)).thenReturn(Map.of(CLIENT_ROLES, "val"));
+        Mockito.when(objectMapper.convertValue(any(), eq(List.class))).thenReturn(List.of());
+
+        Collection<GrantedAuthority> actualOutput = jwtRoleConverter.convert(jwt);
+        Collection<GrantedAuthority> expectedOutput = (awgmentRolesList).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 }

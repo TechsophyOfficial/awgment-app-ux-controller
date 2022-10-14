@@ -7,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.MessageSource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -15,7 +14,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
