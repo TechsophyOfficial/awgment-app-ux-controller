@@ -67,3 +67,13 @@ dependencies {
 jar{
     enabled = false
 }
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.22
+            }
+        }
+    }
+}
