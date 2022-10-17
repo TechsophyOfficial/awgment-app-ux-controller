@@ -24,7 +24,9 @@ import java.util.Map;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GATEWAY_URI_VARIABLE;
-import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.GET;
+import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.CASE_INSTANCE_ID;
+import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.ENGINE_REST;
+import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -85,16 +87,21 @@ class MyTasksServiceImplTest {
     @Test
     void getMyTasksHistory() throws JsonProcessingException {
         String response = "response";
+        String id = "id";
         Mockito.when(webClientWrapper.webclientRequest(any(),anyString(),anyString(),any())).thenReturn(response);
-        myTasksService.getMyTasksHistory("id");
-        verify(objectMapper, times(1)).readValue(response, List.class);
+        List<Map<String, Object>> actualOutput = myTasksService.getMyTasksHistory(id);
+        String requestURL = gatewayURI + camundaServletContextPath+ENGINE_REST+HISTORY+CASE_ACTIVITY_INSTANCE+CASE_INSTANCE_ID+id;
+        List<Map<String, Object>> expectedOutput = objectMapper.readValue(response,List.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void getMyTasksById() throws JsonProcessingException {
         String response = "response";
+        String id = "id";
         Mockito.when(webClientWrapper.webclientRequest(any(),anyString(),anyString(),any())).thenReturn(response);
-        myTasksService.getMyTasksById("id");
-        verify(objectMapper, times(1)).readValue(response, Map.class);
+        Map<String, Object> actualOutput = myTasksService.getMyTasksById(id);
+        Map<String, Object> expectedOutput = objectMapper.readValue(response,Map.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 }

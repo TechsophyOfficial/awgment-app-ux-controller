@@ -95,8 +95,9 @@ public class CommentServiceTest {
         Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
         Mockito.when(objectMapper.convertValue(any(), eq(ApiResponse.class))).thenReturn(apiResponse);
 
-        commentService.createComment(commentDTO);
-        verify(apiResponse, times(1)).getData();
+        Map<String, Object> actualOutput = commentService.createComment(commentDTO);
+        Map<String, Object> expectedOutput = objectMapper.convertValue(apiResponse.getData(), Map.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -120,8 +121,9 @@ public class CommentServiceTest {
         Mockito.when(processService.getTasksByQuery(any(), any(), any())).thenReturn(page);
         Mockito.when(objectMapper.convertValue(any(), any(TypeReference.class))).thenReturn(List.of(task));
 
-        commentService.createComment(commentDTO);
-        verify(objectMapper, times(1)).convertValue(any(), eq(Map.class));
+        Map<String, Object> actualOutput = commentService.createComment(commentDTO);
+        Map<String, Object> expectedOutput = objectMapper.convertValue(response, Map.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test

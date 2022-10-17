@@ -58,8 +58,9 @@ class AllTasksServiceImplTest {
         String response = "response";
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), any(AllTasksCountDTO.class))).thenReturn(response);
 
-        allTasksService.allTasksCount(allTasksCountDTO);
-        verify(objectMapper, times(1)).readValue(response, TaskCountDTO.class);
+        TaskCountDTO actualOutput = allTasksService.allTasksCount(allTasksCountDTO);
+        TaskCountDTO expectedOutput = objectMapper.readValue(response,TaskCountDTO.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -76,8 +77,9 @@ class AllTasksServiceImplTest {
         String response = "response";
         Mockito.when(webClientWrapper.createWebClient(tokenUtils.getTokenFromContext())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), any(AllTasksCountDTO.class))).thenReturn(response);
-        allTasksService.allTasks(allTasksCountDTO, 1, 1);
-        verify(objectMapper, times(1)).readValue(response, List.class);
+        List<AllTasksDTO> actualOutput = allTasksService.allTasks(allTasksCountDTO, 1, 1);
+        List<AllTasksDTO> expectedOutput = objectMapper.readValue(response,List.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -93,8 +95,9 @@ class AllTasksServiceImplTest {
         String response = "response";
         Mockito.when(webClientWrapper.createWebClient(tokenUtils.getTokenFromContext())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), anyString())).thenReturn(response);
-        allTasksService.allTaskCaseInstance("id");
-        verify(objectMapper, times(1)).readValue(response, AllTaskCaseInstanceDTO.class);
+        AllTaskCaseInstanceDTO actualOutput = allTasksService.allTaskCaseInstance("id");
+        AllTaskCaseInstanceDTO expectedOutput = objectMapper.readValue(response,AllTaskCaseInstanceDTO.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -110,8 +113,9 @@ class AllTasksServiceImplTest {
         String response = "response";
         Mockito.when(webClientWrapper.createWebClient(tokenUtils.getTokenFromContext())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), anyString())).thenReturn(response);
-        allTasksService.allTaskVariables("id");
-        verify(objectMapper, times(1)).readValue(response, AllTaskFormsDTO.class);
+        AllTaskFormsDTO actualOutput = allTasksService.allTaskVariables("id");
+        AllTaskFormsDTO expectedOutput = objectMapper.readValue(response,AllTaskFormsDTO.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -127,8 +131,9 @@ class AllTasksServiceImplTest {
         String response = "response";
         Mockito.when(webClientWrapper.createWebClient(tokenUtils.getTokenFromContext())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), anyString())).thenReturn(response);
-        allTasksService.allTaskFormVariables("id");
-        verify(objectMapper, times(1)).readValue(response, AllTaskFormVariablesDTO.class);
+        AllTaskFormVariablesDTO actualOutput = allTasksService.allTaskFormVariables("id");
+        AllTaskFormVariablesDTO expectedOutput = objectMapper.readValue(response,AllTaskFormVariablesDTO.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -144,8 +149,9 @@ class AllTasksServiceImplTest {
         String response = "response";
         Mockito.when(webClientWrapper.createWebClient(tokenUtils.getTokenFromContext())).thenReturn(webClient);
         Mockito.when(webClientWrapper.webclientRequest(any(WebClient.class), anyString(), anyString(), anyString())).thenReturn(response);
-        allTasksService.allTaskCaseActivityInstance("id");
-        verify(objectMapper, times(1)).readValue(response, List.class);
+        List<CaseActivityInstanceDTO> actualOutput = allTasksService.allTaskCaseActivityInstance("id");
+        List<CaseActivityInstanceDTO> expectedOutput = objectMapper.readValue(response,List.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
+import com.techsophy.tsf.wrapperservice.constants.MessageConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
 import com.techsophy.tsf.wrapperservice.utils.WebClientWrapper;
@@ -20,10 +21,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GATEWAY_URI_VARIABLE;
+import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.FILTER;
+import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.ENGINE_REST;
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.POST;
+import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.GET;
+import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.URL_SEPERATOR;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -54,12 +60,16 @@ class FilterServiceImplTest {
     @Value(GATEWAY_URI_VARIABLE)
     private String gatewayURI;
     private FilterDTO filterDTO;
+    private String id = "id";
+    private String url;
 
     @BeforeEach
     void setUp() {
         ReflectionTestUtils.setField(filterService, "camundaServletContextPath", "http://apigateway.techsophy.com");
         ReflectionTestUtils.setField(filterService, "gatewayURI", "http://apigateway.techsophy.com");
         filterDTO = new FilterDTO("rType", "name", "owner", Map.of("key", "val"), Map.of("key", "val"));
+        id = "id";
+        url = gatewayURI + camundaServletContextPath +ENGINE_REST+FILTER+URL_SEPERATOR+id+ MessageConstants.COUNT;
     }
 
     @Test
@@ -81,8 +91,11 @@ class FilterServiceImplTest {
         Mockito.when(webClientWrapper.webclientRequest(any(),anyString(),anyString(),any(ExecuteFilterDTO.class))).thenReturn(response);
         Mockito.when(objectMapper.readValue(response,List.class)).thenReturn(list);
 
-        filterService.executeFilter("id", executeFilterDTO, "", "first", "max", true);
-        verify(webClientWrapper, times(1)).createWebClient(any());
+        List<Map<String, Object>> actualOutput = filterService.executeFilter("id", executeFilterDTO, "", "first", "max", true);
+        List<Map<String,Object>>  filterLIst = objectMapper.readValue(response,List.class);
+        List<Map<String, Object>> expectedOutput = filterLIst.stream().filter(fi-> fi.get("assignee")==null || !(fi.get("assignee").equals("bhavya"))).collect(Collectors.toList());
+
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -95,14 +108,17 @@ class FilterServiceImplTest {
         Mockito.when(webClientWrapper.webclientRequest(any(),anyString(),anyString(),any(ExecuteFilterDTO.class))).thenReturn(response);
         Mockito.when(objectMapper.readValue(response,List.class)).thenReturn(list);
 
-        filterService.executeFilter("id", executeFilterDTO, "", "first", "max", false);
-        verify(webClientWrapper, times(1)).createWebClient(any());
+        List<Map<String,Object>> actualOutput = filterService.executeFilter("id", executeFilterDTO, "", "first", "max", false);
+        List<Map<String,Object>> expectedOutput = objectMapper.readValue(response,List.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void getFilterByIdTest() throws JsonProcessingException {
-        filterService.getFilterById("id");
-        verify(webClientWrapper, times(1)).createWebClient(any());
+        FilterResponseDTO actualOutput = filterService.getFilterById(id);
+        String response = webClientWrapper.webclientRequest(webClient,url,GET,null);
+        FilterResponseDTO expectedOutput = objectMapper.readValue(response, FilterResponseDTO.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -112,13 +128,17 @@ class FilterServiceImplTest {
         List list = List.of(map1, map2);
         FilterCountDTO filterCountDTO = new FilterCountDTO(list);
 
-        filterService.filterCount("id", filterCountDTO);
-        verify(webClientWrapper, times(1)).createWebClient(any());
+        FilterCountResponseDTO actualOutput = filterService.filterCount("id", filterCountDTO);
+        String response = webClientWrapper.webclientRequest(webClient,url,POST,filterCountDTO);
+        FilterCountResponseDTO expectedOutput = objectMapper.readValue(response, FilterCountResponseDTO.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void getFormVariablesTest() throws JsonProcessingException {
-        filterService.getFormVariables("id");
-        verify(webClientWrapper, times(1)).createWebClient(any());
+        Map<String, Object> actualOutput = filterService.getFormVariables("id");
+        String response = webClientWrapper.webclientRequest(webClient,url,GET,null);
+        Map<String, Object> expectedOutput = objectMapper.readValue(response, Map.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 }
