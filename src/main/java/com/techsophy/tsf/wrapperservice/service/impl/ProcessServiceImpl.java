@@ -437,7 +437,8 @@ public class ProcessServiceImpl implements ProcessService
         deletehttpHeaders.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<?> deletehttpEntity = new HttpEntity<Object>(null, deletehttpHeaders);
         ResponseEntity<Object> response = restTemplate.exchange(uriComponentsBuilder2.toUriString(), HttpMethod.DELETE, deletehttpEntity, Object.class);
-//           if(response.getStatusCode().is2xxSuccessful())
+
+        //           if(response.getStatusCode().is2xxSuccessful())
 //           {
 //               String formDataUpdateUrl=gatewayURI+FORM_DATA_UPDATE_URL;
 //               StatusCodeUpdateDTO statusCodeUpdateDTO=new StatusCodeUpdateDTO();
