@@ -159,4 +159,8 @@ public interface ProcessController {
     @PreAuthorize(CREATE_OR_ALL_ACCESS)
     ApiResponse<Void>completeTaskWithChecklistItemInstanceId(@RequestBody ChecklistItemInstanceDTO checklistItemInstanceDTO) throws JsonProcessingException;
 
+    @DeleteMapping(TASKS+DELETE)
+    @PreAuthorize(DELETE_OR_ALL_ACCESS)
+    ApiResponse<Void>deleteProcessById(@RequestBody DeleteTaskDTO deleteTaskDTO) throws JsonProcessingException;
+
 }

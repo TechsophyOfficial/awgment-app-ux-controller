@@ -8,6 +8,7 @@ public class ApplicationEndpointConstants
 {
     public static final String BASEURL = "/workflow";
     public static final String VERSION_1 = "/v1";
+
     public static final String TASKS = "/tasks";
     public static final String HISTORY_TASKS = "/history/tasks";
     public static final String COMPLETE_TASK = TASKS + "/complete";
@@ -60,6 +61,15 @@ public class ApplicationEndpointConstants
     public static final String MY_TASKS ="/mytasks";
 
     public static final String COMPLETE="/complete";
+    public static final String PROCESS_INSTANCE="/process-instance";
+    public static final String PROCESS_INSTANCE_ID="/{processInstanceId}";
+    public static final String DELETE_TASK_PATH_ID="processInstanceId";
+    public static final String DELETE_TASK="";
+
+
+
+
+
     public static final String CHECKLIST_ITEM="/checklist-item-instances";
 
 

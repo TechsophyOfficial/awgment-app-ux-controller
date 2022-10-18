@@ -33,6 +33,8 @@ public class CamundaApiConstants
 
     public static final String CASE_INSTANCEID = "caseInstanceId";
 
+
+
     public static final String CREATE_TASK = ENGINE_REST + "/task/create";
     public static final String IDENTITY_LINK = ENGINE_REST + "/task/{id}/identity-links";
     public static final String IDENTITY_LINK_DELETE = ENGINE_REST + "/task/{id}/identity-links/delete";
@@ -74,5 +76,8 @@ public class CamundaApiConstants
 
     public static final String ALLTASKCASEINSTANCEID="?caseInstanceId=";
     public static final String ALL_TASK_CASE_INSTANCE=ENGINE_REST+"/case-instance/";
+//    public static final String GET_TASK_DETAILS="";
+
+    public static final String DELETE_TASK_BY_PROCESS_INSTANCE_ID = "/process-instance/";
 
 }

@@ -414,6 +414,54 @@ public class ProcessServiceImpl implements ProcessService
     }
 
     @Override
+    public void deleteProcessById(DeleteTaskDTO deleteTaskDTO) throws JsonProcessingException
+    {
+        Map<String,Object> formDataMap=new HashMap<>();
+        String ticketValue=deleteTaskDTO.getTicketNumder();
+        Map<String,String> ticketData =new HashMap<>();
+        String ticketNumber="Review Ticket-"+ticketValue;
+        ticketData.put("name",ticketNumber);
+        String ticketDetailsUrl=gatewayURI+camundaServletContextPath+ENGINE_REST+TASK;
+        UriComponentsBuilder uriComponentsBuilder1 = UriComponentsBuilder.fromHttpUrl(ticketDetailsUrl);
+        HttpHeaders httpHeaders1 = new HttpHeaders();
+        httpHeaders1.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+        httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> httpEntity1 = new HttpEntity<Object>(ticketData,httpHeaders1);
+        ResponseEntity responseEntity1 = restTemplate.exchange(uriComponentsBuilder1.toUriString(), HttpMethod.POST, httpEntity1, Object.class);
+        List<Map<String,Object>> responseEntity1Body = (List<Map<String, Object>>) responseEntity1.getBody();
+        String processInstanceId= String.valueOf(responseEntity1Body.get(0).get("processInstanceId"));
+        String deleteTicketUrl=gatewayURI+camundaServletContextPath+ENGINE_REST+DELETE_TASK_BY_PROCESS_INSTANCE_ID+processInstanceId;
+        UriComponentsBuilder uriComponentsBuilder2 = UriComponentsBuilder.fromHttpUrl(deleteTicketUrl);
+        HttpHeaders deletehttpHeaders = new HttpHeaders();
+        deletehttpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+        deletehttpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> deletehttpEntity = new HttpEntity<Object>(null, deletehttpHeaders);
+        ResponseEntity<Object> response = restTemplate.exchange(uriComponentsBuilder2.toUriString(), HttpMethod.DELETE, deletehttpEntity, Object.class);
+//           if(response.getStatusCode().is2xxSuccessful())
+//           {
+//               String formDataUpdateUrl=gatewayURI+FORM_DATA_UPDATE_URL;
+//               StatusCodeUpdateDTO statusCodeUpdateDTO=new StatusCodeUpdateDTO();
+//               Map<String,Object> formData=new HashMap<>();
+//               formData.put("ticketNumber",deleteTaskDTO.getTicketNumder());
+//               formData.put("ticketType",deleteTaskDTO.getTicketType());
+//               formData.put("ticketDescription",deleteTaskDTO.getTicketDescription());
+//               formData.put("emailId",deleteTaskDTO.getEmailId());
+//               formData.put("mobileNumber",deleteTaskDTO.getMobileNumber());
+//               formData.put("createdOn",deleteTaskDTO.getTicketNumder());
+//               formData.put("status","Cancel");
+//               statusCodeUpdateDTO.setId("959323698389225472");
+//               statusCodeUpdateDTO.setFormData(formData);
+//               UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(formDataUpdateUrl);
+//               HttpHeaders formDataHttpHeaders = new HttpHeaders();
+//               httpHeaders1.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+//               httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
+//               HttpEntity<?> formDataHttpEntity = new HttpEntity<Object>(statusCodeUpdateDTO, formDataHttpHeaders);
+//               ResponseEntity formDataResponse = restTemplate.exchange(uriComponentsBuilder1.toUriString(), HttpMethod.POST, formDataHttpEntity, Object.class);
+//
+//           }
+    }
+
+    @Override
     public PaginationDTO<List<HistoricInstanceDTO>> getHistoryTasksByQuery(HistoricQueryInstanceDTO historicQueryInstanceDTO, Integer page, Integer size) throws JsonProcessingException {
         String url = gatewayURI + camundaServletContextPath + GET_ALL_HISTORY_TASK;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
@@ -427,5 +475,17 @@ public class ProcessServiceImpl implements ProcessService
         return this.objectMapper.convertValue(response.getBody(), new TypeReference<>() {
         });
     }
+
+
+//    @Override
+//    public void deleteProcessById( ) throws JsonProcessingException
+//    {
+//        String ticketDetailsUrl=gatewayURI+camundaServletContextPath+
+//
+//        String url=gatewayURI+camundaServletContextPath+DELETE_TASK_BY_PROCESS_INSTANCE_ID;
+//
+//
+//    }
+
 
 }

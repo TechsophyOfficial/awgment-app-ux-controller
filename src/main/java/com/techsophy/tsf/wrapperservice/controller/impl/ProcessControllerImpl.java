@@ -173,4 +173,9 @@ public class ProcessControllerImpl implements ProcessController {
         return new ApiResponse(null, true, "Task Completed successfully");
     }
 
+    @Override
+    public ApiResponse<Void> deleteProcessById(DeleteTaskDTO deleteTaskDTO) throws JsonProcessingException {
+        this.processService.deleteProcessById(deleteTaskDTO);
+        return new ApiResponse(null, true, "Task deleted successfully");    }
+
 }
