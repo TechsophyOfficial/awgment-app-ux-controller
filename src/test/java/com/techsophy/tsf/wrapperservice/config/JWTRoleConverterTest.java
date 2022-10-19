@@ -76,7 +76,6 @@ class JWTRoleConverterTest {
         List<String> awgmentRolesList = new ArrayList<>();
         String userResponce = "userResponse";
         Mockito.when(webClientWrapper.webclientRequest(any(), any(), any(), any())).thenReturn(userResponce);
-        Mockito.when(objectMapper.readValue(userResponce, Map.class)).thenReturn(Map.of("key", "val"));
         Mockito.when(objectMapper.readValue(userResponce,Map.class)).thenReturn(Map.of(CLIENT_ROLES, "val"));
         Mockito.when(objectMapper.convertValue(any(), eq(List.class))).thenReturn(List.of());
 
