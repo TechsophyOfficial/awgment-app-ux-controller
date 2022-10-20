@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.*;
-import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.TASK;
 
 @RequestMapping(BASEURL+VERSION_1)

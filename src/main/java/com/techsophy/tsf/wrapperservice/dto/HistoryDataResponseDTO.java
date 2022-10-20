@@ -1,13 +1,8 @@
 package com.techsophy.tsf.wrapperservice.dto;
 
 import lombok.Data;
-import lombok.Value;
-import lombok.With;
 
 import java.time.Instant;
-import java.util.List;
-import java.util.Map;
-
 @Data
 public class HistoryDataResponseDTO {
     String  id;

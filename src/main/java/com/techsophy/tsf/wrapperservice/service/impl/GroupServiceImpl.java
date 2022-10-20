@@ -44,9 +44,7 @@ public class GroupServiceImpl implements GroupService {
         if(response.isBlank()) {
             throw new InvalidInputException(UNABLE_TO_RETRIEVE_COUNT,globalMessageSource.get(UNABLE_TO_RETRIEVE_COUNT));
         }
-        TaskCountDTO result = this.objectMapper.readValue(response, TaskCountDTO.class);
-        return result;
-
+        return this.objectMapper.readValue(response, TaskCountDTO.class);
     }
 
     @Override
@@ -59,8 +57,8 @@ public class GroupServiceImpl implements GroupService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_GROUP_TASKS,globalMessageSource.get(UNABLE_TO_FETCH_GROUP_TASKS));
         }
-        List<GroupTaskDTO> result=this.objectMapper.readValue(response,List.class);
-        return result;
+
+        return this.objectMapper.readValue(response,List.class);
 
     }
 
@@ -73,8 +71,8 @@ public class GroupServiceImpl implements GroupService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID,globalMessageSource.get(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID));
         }
-        List<GroupTaskHistoryDTO> result=this.objectMapper.readValue(response,List.class);
-        return result;
+
+        return this.objectMapper.readValue(response,List.class);
     }
 
     @Override
@@ -86,8 +84,8 @@ public class GroupServiceImpl implements GroupService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID,globalMessageSource.get(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID));
         }
-        GroupCaseInstanceDTO result=this.objectMapper.readValue(response, GroupCaseInstanceDTO.class);
-        return result;
+
+        return this.objectMapper.readValue(response, GroupCaseInstanceDTO.class);
     }
 
     @Override
@@ -99,8 +97,8 @@ public class GroupServiceImpl implements GroupService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID,globalMessageSource.get(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID));
         }
-        GroupFormDTo result=this.objectMapper.readValue(response, GroupFormDTo.class);
-        return result;
+
+        return this.objectMapper.readValue(response, GroupFormDTo.class);
     }
 
     @Override
@@ -112,8 +110,8 @@ public class GroupServiceImpl implements GroupService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID,globalMessageSource.get(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID));
         }
-        AllTaskCaseInstanceDTO result=this.objectMapper.readValue(response, AllTaskCaseInstanceDTO.class);
-        return result;
+
+        return this.objectMapper.readValue(response, AllTaskCaseInstanceDTO.class);
     }
 
     @Override
@@ -125,7 +123,7 @@ public class GroupServiceImpl implements GroupService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID,globalMessageSource.get(UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID));
         }
-        GroupTaskCaseDefinition result=this.objectMapper.readValue(response, GroupTaskCaseDefinition.class);
-        return result;
+
+        return this.objectMapper.readValue(response, GroupTaskCaseDefinition.class);
     }
 }
