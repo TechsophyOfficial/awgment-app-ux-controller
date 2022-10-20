@@ -38,6 +38,8 @@ class AllTasksControllerImplTest {
     @Test
     void allTasksCountTest() throws JsonProcessingException {
         AllTasksCountDTO allTasksCountDTO = Mockito.mock(AllTasksCountDTO.class);
+        TaskCountDTO taskCountDTO = Mockito.mock(TaskCountDTO.class);
+        Mockito.when(allTasksService.allTasksCount(allTasksCountDTO)).thenReturn(taskCountDTO);
 
         ApiResponse<TaskCountDTO> actualOutput = allTasksController.allTasksCount(allTasksCountDTO);
         ApiResponse<TaskCountDTO> expectedOutput = new ApiResponse<>(allTasksService.allTasksCount(allTasksCountDTO),true, MessageConstants.GET_TASK_COUNT_SUCCESS);
@@ -48,6 +50,8 @@ class AllTasksControllerImplTest {
     @Test
     void allTasksCountTestWithThreeParameter() throws JsonProcessingException {
         AllTasksCountDTO allTasksCountDTO = Mockito.mock(AllTasksCountDTO.class);
+        AllTasksDTO allTasksDTO = Mockito.mock(AllTasksDTO.class);
+        Mockito.when(allTasksService.allTasks(allTasksCountDTO, 1, 1)).thenReturn(List.of(allTasksDTO));
 
         ApiResponse<List<AllTasksDTO>> actualOutput = allTasksController.allTasksCount(allTasksCountDTO, 1, 1);
         ApiResponse<List<AllTasksDTO>> expectedOutput = new ApiResponse<>(allTasksService.allTasks(allTasksCountDTO, 1, 1),true,MessageConstants. GET_ALL_TASKS);
@@ -57,6 +61,9 @@ class AllTasksControllerImplTest {
 
     @Test
     void allTaskCaseInstanceTest() throws JsonProcessingException {
+        AllTaskCaseInstanceDTO allTaskCaseInstanceDTO = Mockito.mock(AllTaskCaseInstanceDTO.class);
+        Mockito.when(allTasksService.allTaskCaseInstance(id)).thenReturn(allTaskCaseInstanceDTO);
+
         ApiResponse<AllTaskCaseInstanceDTO> actualOutput = allTasksController.allTaskCaseInstance(id);
         ApiResponse<AllTaskCaseInstanceDTO> expectedOutput = new ApiResponse<>(allTasksService.allTaskCaseInstance(id),true,MessageConstants. GET_ALL_TASKS);
 
@@ -65,6 +72,9 @@ class AllTasksControllerImplTest {
 
     @Test
     void allTaskCaseActivityInstanceTest() throws JsonProcessingException {
+        CaseActivityInstanceDTO caseActivityInstanceDTO = Mockito.mock(CaseActivityInstanceDTO.class);
+        Mockito.when(allTasksService.allTaskCaseActivityInstance(id)).thenReturn(List.of(caseActivityInstanceDTO));
+
         ApiResponse<List<CaseActivityInstanceDTO>> actualOutput = allTasksController.allTaskCaseActivityInstance(id);
         ApiResponse<List<CaseActivityInstanceDTO>> expectedOutput = new ApiResponse<>(allTasksService.allTaskCaseActivityInstance(id),true,MessageConstants. GET_ALL_TASKS);
 
@@ -73,6 +83,9 @@ class AllTasksControllerImplTest {
 
     @Test
     void allTaskVariablesTest() throws JsonProcessingException {
+        AllTaskFormsDTO allTaskFormsDTO = Mockito.mock(AllTaskFormsDTO.class);
+        Mockito.when(allTasksService.allTaskVariables(id)).thenReturn(allTaskFormsDTO);
+
         ApiResponse<AllTaskFormsDTO> actualOutput = allTasksController.allTaskVariables(id);
         ApiResponse<AllTaskFormsDTO> expectedOutput = new ApiResponse<>(allTasksService.allTaskVariables(id),true,MessageConstants. GET_ALL_TASKS);
 
@@ -81,6 +94,9 @@ class AllTasksControllerImplTest {
 
     @Test
     void allTaskFormVariablesTest() throws JsonProcessingException {
+        AllTaskFormVariablesDTO allTaskFormVariablesDTO = Mockito.mock(AllTaskFormVariablesDTO.class);
+        Mockito.when(allTasksService.allTaskFormVariables(id)).thenReturn(allTaskFormVariablesDTO);
+
         ApiResponse<AllTaskFormVariablesDTO> actualOutput = allTasksController.allTaskFormVariables(id);
         ApiResponse<AllTaskFormVariablesDTO> expectedOutput = new ApiResponse<>(allTasksService.allTaskFormVariables(id),true,MessageConstants. GET_ALL_TASKS);
 

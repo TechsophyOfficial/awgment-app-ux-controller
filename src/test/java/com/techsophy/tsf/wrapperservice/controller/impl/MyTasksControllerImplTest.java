@@ -14,6 +14,9 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,6 +39,7 @@ class MyTasksControllerImplTest {
 
     @Test
     void myTasksCountTest() throws JsonProcessingException {
+        Mockito.when(myTasksService.myTasksCount(myTasksDTO)).thenReturn("value");
         ApiResponse actualOutput = myTasksController.myTasksCount(myTasksDTO);
         ApiResponse expectedOutput = new ApiResponse<>(myTasksService.myTasksCount(myTasksDTO), true, MessageConstants.GET_TASK_COUNT);
         Assertions.assertEquals(expectedOutput, actualOutput);
@@ -45,13 +49,17 @@ class MyTasksControllerImplTest {
     void getAllMyTasksTest() throws JsonProcessingException {
         String firstResult = "1";
         String maxResult = "1";
+        Map<String, Object> map = Map.of("key", "val");
+        Mockito.when(myTasksService.getAllTasks(myTasksDTO,firstResult,maxResult)).thenReturn(List.of(map));
         ApiResponse actualOutput = myTasksController.getAllMyTasks(myTasksDTO, firstResult, maxResult);
-        ApiResponse expectedOutput = new ApiResponse<>(this.myTasksService.getAllTasks(myTasksDTO,firstResult,maxResult), true, MessageConstants.GET_ALL_TASKS_SUCCESS);
+        ApiResponse expectedOutput = new ApiResponse<>(myTasksService.getAllTasks(myTasksDTO,firstResult,maxResult), true, MessageConstants.GET_ALL_TASKS_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void getMyTasksHistoryTest() throws JsonProcessingException {
+        Map<String, Object> map = Map.of("key", "val");
+        Mockito.when(myTasksService.getMyTasksHistory(id)).thenReturn(List.of(map));
         ApiResponse actualOutput = myTasksController.getMyTasksHistory(id);
         ApiResponse expectedOutput = new ApiResponse<>(myTasksService.getMyTasksHistory(id), true, MessageConstants.GET_MY_TASKS_HISTORY_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);
@@ -59,6 +67,8 @@ class MyTasksControllerImplTest {
 
     @Test
     void getMyTasksByIdTest() throws JsonProcessingException {
+        Map<String, Object> map = Map.of("key", "val");
+        Mockito.when(myTasksService.getMyTasksById(id)).thenReturn(map);
         ApiResponse actualOutput = myTasksController.getMyTasksById(id);
         ApiResponse expectedOutput = new ApiResponse<>(myTasksService.getMyTasksById(id), true, MessageConstants.GET_MY_TASKS_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);

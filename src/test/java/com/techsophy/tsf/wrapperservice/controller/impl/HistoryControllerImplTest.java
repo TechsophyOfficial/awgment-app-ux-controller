@@ -27,6 +27,8 @@ class HistoryControllerImplTest {
     @Test
     void historyCountTest() throws JsonProcessingException {
         HistoryDTO historyDTO = Mockito.mock(HistoryDTO.class);
+        HistoryResponseDTO historyResponseDTO = Mockito.mock(HistoryResponseDTO.class);
+        Mockito.when(historyService.historyCount(historyDTO)).thenReturn(historyResponseDTO);
         ApiResponse<HistoryResponseDTO> actualOutput = historyController.historyCount(historyDTO);
         ApiResponse<HistoryResponseDTO> expectedOutput = new ApiResponse<>(historyService.historyCount(historyDTO), true, MessageConstants.CREATE_TASK_COUNT_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);

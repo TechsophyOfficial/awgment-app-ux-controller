@@ -48,6 +48,7 @@ public class CommentControllerTest {
     @Test
     void createCommentTest(){
         CommentDTO commentDTO = new CommentDTO("task_id", "p_id", "b_key", "test_comment");
+        Mockito.when(commentService.createComment(commentDTO)).thenReturn(Map.of("key", "val"));
         ApiResponse<Map<String, Object>> actualOutput = commentController.createComment(commentDTO);
         ApiResponse<Map<String, Object>> expectedOutput = new ApiResponse<>(commentService.createComment(commentDTO), true, MessageConstants.CREATE_COMMENT_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);
@@ -56,6 +57,7 @@ public class CommentControllerTest {
     @Test
     void getCommentsTest(){
         String processInstanceId = "p_id", caseInstanceId = "c_id", businessKey = "b_key";
+        Mockito.when(commentService.getComments(processInstanceId,caseInstanceId, businessKey)).thenReturn("object");
         ApiResponse<Object> actualOutput = commentController.getComments(processInstanceId, caseInstanceId, businessKey);
         ApiResponse<Object> expectedOutput = new ApiResponse<>(commentService.getComments(processInstanceId,caseInstanceId, businessKey), true, MessageConstants.GET_COMMENTS_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);

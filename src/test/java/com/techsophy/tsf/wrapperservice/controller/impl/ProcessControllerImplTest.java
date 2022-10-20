@@ -38,6 +38,9 @@ public class ProcessControllerImplTest {
     @Test
     void getTasksByQueryTest() {
         TaskQueryDTO taskQueryDTO = Mockito.mock(TaskQueryDTO.class);
+        TaskInstanceDTO taskInstanceDTO = Mockito.mock(TaskInstanceDTO.class);
+        List list = List.of(taskInstanceDTO);
+        Mockito.when(processService.getTasksByQuery(taskQueryDTO, page, size)).thenReturn(new PaginationDTO<>(list, 1, 1, 1, 1l, 1l));
         PaginationDTO<List<TaskInstanceDTO>> actualOutput = processController.getTasksByQuery(taskQueryDTO, page, size);
         PaginationDTO<List<TaskInstanceDTO>> expectedOutput = processService.getTasksByQuery(taskQueryDTO, page, size);
 
@@ -47,6 +50,9 @@ public class ProcessControllerImplTest {
     @Test
     void getHistoryTasksByQueryTest() throws JsonProcessingException {
         HistoricQueryInstanceDTO dto = Mockito.mock(HistoricQueryInstanceDTO.class);
+        HistoricInstanceDTO historicInstanceDTO = Mockito.mock(HistoricInstanceDTO.class);
+        List list = List.of(historicInstanceDTO);
+        Mockito.when(processService.getHistoryTasksByQuery(dto, page, size)).thenReturn(new PaginationDTO<>(list, 1, 1, 1, 1l, 1l));
         PaginationDTO<List<HistoricInstanceDTO>> actualOutput = processController.getHistoryTasksByQuery(dto, page, size);
         PaginationDTO<List<HistoricInstanceDTO>> expectedOutput = processService.getHistoryTasksByQuery(dto, page, size);
 
@@ -55,6 +61,9 @@ public class ProcessControllerImplTest {
 
     @Test
     void getAllTasksTest() throws JsonProcessingException {
+        TaskInstanceDTO taskInstanceDTO = Mockito.mock(TaskInstanceDTO.class);
+        List list = List.of(taskInstanceDTO);
+        Mockito.when(processService.getAllTasks(page, size)).thenReturn(new PaginationDTO<>(list, 1, 1, 1, 1l, 1l));
         PaginationDTO<List<TaskInstanceDTO>> actualOutput = processController.getAllTasks(page, size);
         PaginationDTO<List<TaskInstanceDTO>> expectedOutput = processService.getAllTasks(page, size);
 
@@ -64,6 +73,9 @@ public class ProcessControllerImplTest {
     @Test
     void getTasksCountTest() throws JsonProcessingException {
         TaskQueryDTO taskQuery = Mockito.mock(TaskQueryDTO.class);
+        TaskCountDTO taskCountDTO = Mockito.mock(TaskCountDTO.class);
+        Mockito.when(processService.getTasksCount(taskQuery)).thenReturn(taskCountDTO);
+
         ApiResponse<TaskCountDTO> actualOutput = processController.getTasksCount(taskQuery);
         ApiResponse<TaskCountDTO> expectedOutput = new ApiResponse<>(processService.getTasksCount(taskQuery), true, MessageConstants.GET_TASK_COUNT_SUCCESS);
 
@@ -126,6 +138,8 @@ public class ProcessControllerImplTest {
     @Test
     void getIdentityLinksOfTaskTest() throws JsonProcessingException {
         String taskId = "task_id";
+        IdentityLinksDto identityLinksDto = Mockito.mock(IdentityLinksDto.class);
+        Mockito.when(processService.getIdentityLinksOfTask(taskId)).thenReturn(List.of(identityLinksDto));
         ApiResponse<List<IdentityLinksDto>> actualOutput = processController.getIdentityLinksOfTask(taskId);
         ApiResponse<List<IdentityLinksDto>> expectedOutput = new ApiResponse<>(processService.getIdentityLinksOfTask(taskId), true, IDENTITY_LINKS_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);
@@ -142,8 +156,10 @@ public class ProcessControllerImplTest {
     @Test
     void getHistoryOfTaskTest() throws JsonProcessingException {
         String filter = "filter";
+        TaskHistoryDto taskHistoryDto = Mockito.mock(TaskHistoryDto.class);
+        Mockito.when(processService.getHistoryOfTask(filter)).thenReturn(List.of(taskHistoryDto));
         ApiResponse<List<TaskHistoryDto>> actualOutput = processController.getHistoryOfTask(filter);
-        ApiResponse<List<TaskHistoryDto>> expectedOutput = new ApiResponse<>(this.processService.getHistoryOfTask(filter), true, GET_HISTORY_SUCCESS);
+        ApiResponse<List<TaskHistoryDto>> expectedOutput = new ApiResponse<>(processService.getHistoryOfTask(filter), true, GET_HISTORY_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 

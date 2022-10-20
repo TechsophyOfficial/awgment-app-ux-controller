@@ -29,8 +29,10 @@ class HistoryDataControllerImplTest {
     @Test
     void historyDataTest() throws JsonProcessingException {
         HistoryDataDTO dto = Mockito.mock(HistoryDataDTO.class);
+        HistoryDataResponseDTO historyDataResponseDTO = Mockito.mock(HistoryDataResponseDTO.class);
         Integer firstResult = 1;
         Integer maxResult = 1;
+        Mockito.when(historyDataService.historyData(dto, firstResult, maxResult)).thenReturn(List.of(historyDataResponseDTO));
         ApiResponse<List<HistoryDataResponseDTO>> actualOutput = historyDataController.historyData(dto, firstResult, maxResult);
         ApiResponse<List<HistoryDataResponseDTO>> expectedOutput = new ApiResponse<>(historyDataService.historyData(dto, firstResult, maxResult),
                 true, MessageConstants.CREATE_TASK_COUNT_SUCCESS);
