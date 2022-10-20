@@ -6,6 +6,7 @@ import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
 import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.model.TaskModel;
+import com.techsophy.tsf.wrapperservice.model.TaskQuery;
 import com.techsophy.tsf.wrapperservice.service.ProcessService;
 import com.techsophy.tsf.wrapperservice.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.*;
@@ -59,36 +60,7 @@ public class CommentServiceTest {
          ReflectionTestUtils.setField(commentService, "gatewayURI", "https://api-gateway.techsophy.com/api");
          ReflectionTestUtils.setField(commentService, "camundaServletContextPath", "/camunda");
     }
-    /*@Test
-    void createCommentTest() throws Exception
-    {
-        try(MockedStatic<UriComponentsBuilder> mb = Mockito.mockStatic(UriComponentsBuilder.class)) {
-            String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.CREATE_COMMENT;
-            mb.when(() -> UriComponentsBuilder.fromHttpUrl(anyString())).thenReturn(uriComponentsBuilder);
-            Mockito.when(uriComponentsBuilder.toUriString()).thenReturn("abc");
-            HttpEntity<String> request = new HttpEntity<>(("bar"));
-            ResponseEntity<Object> serviceResponse = new ResponseEntity<Object>("abc", HttpStatus.OK);
-            ResponseEntity<Object> serviceResponse1 = new ResponseEntity<Object>("abc",HttpStatus.BAD_REQUEST);
-            when(restTemplate.exchange(
-                    ArgumentMatchers.anyString(),
-                    ArgumentMatchers.any(HttpMethod.class),
-                    ArgumentMatchers.any(),
-                    ArgumentMatchers.<Class<Object>>any()))
-                    .thenReturn(serviceResponse).thenReturn(serviceResponse1);
-            TaskQueryDTO taskQueryDTO = new TaskQueryDTO();
-            CommentDTO commentDTO = new CommentDTO("1", "1", "abc", "abc");
-            CommentDTO commentDTO1 = new CommentDTO();
-            CommentDTO commentDTO2 = new CommentDTO(null, null, "abc", "abc");
-            ApiResponse apiResponse = new ApiResponse("abc", true, "abc");
-            Mockito.when(objectMapper.convertValue(any(), eq(ApiResponse.class))).thenReturn(apiResponse);
-            Mockito.when(processService.getTasksByQuery(taskQueryDTO, 1, 2)).thenReturn(new PaginationDTO<>(Collections.singletonList(taskInstanceDTO), 0, 1, 1, 1, Long.parseLong("1")));
-            Mockito.when(objectMapper.convertValue(any(),any(TypeReference.class))).thenReturn(List.of()).thenReturn(List.of(taskModel));
-            Assertions.assertThrows(IllegalArgumentException.class,()-> commentService.createComment(commentDTO2));
-            commentService.createComment(commentDTO2);
-            commentService.createComment(commentDTO);
-            Assertions.assertThrows(IllegalArgumentException.class, () -> commentService.createComment(commentDTO1));
-        }
-    }*/
+
     @Test
     void getComments() throws Exception
     {
@@ -112,6 +84,60 @@ public class CommentServiceTest {
             commentService.getComments("1","1","abc");
             Assertions.assertThrows(IllegalArgumentException.class,()->commentService.getComments(null,null,null));
         }
+    }
+
+    @Test
+    void createCommentTest(){
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        ApiResponse apiResponse = Mockito.mock(ApiResponse.class);
+        CommentDTO commentDTO = new CommentDTO("taskId", "pid", "bk", "comment");
+        Mockito.when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
+        Mockito.when(objectMapper.convertValue(any(), eq(ApiResponse.class))).thenReturn(apiResponse);
+
+        Map<String, Object> actualOutput = commentService.createComment(commentDTO);
+        Map<String, Object> expectedOutput = objectMapper.convertValue(apiResponse.getData(), Map.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
+    }
+
+    @Test
+    void createCommentTestWhileThrowingException(){
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        CommentDTO commentDTO = new CommentDTO(null, "pid", null, "comment");
+        Mockito.when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> commentService.createComment(commentDTO));
+    }
+
+    @Test
+    void createCommentTestWhileCommentDtoIsNull(){
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        Map<String, Object> expectedOutput = objectMapper.convertValue(response, Map.class);
+        TaskModel task = Mockito.mock(TaskModel.class);
+        CommentDTO commentDTO = new CommentDTO(null, null, "bKey", "comment");
+        PaginationDTO<List<TaskInstanceDTO>> page = new PaginationDTO<>(List.of(taskInstanceDTO), 1, 1, 1, 1l, 1l);
+        Mockito.when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(processService.getTasksByQuery(any(), any(), any())).thenReturn(page);
+        Mockito.when(objectMapper.convertValue(any(), any(TypeReference.class))).thenReturn(List.of(task));
+
+        Map<String, Object> actualOutput = commentService.createComment(commentDTO);
+        Assertions.assertEquals(expectedOutput, actualOutput);
+    }
+
+    @Test
+    void createCommentTestWhileTaskIsEmpty(){
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        List<TaskModel> list = new ArrayList<>();
+        CommentDTO commentDTO = new CommentDTO(null, null, "bKey", "comment");
+        PaginationDTO<List<TaskInstanceDTO>> page = new PaginationDTO<>(List.of(taskInstanceDTO), 1, 1, 1, 1l, 1l);
+        Mockito.when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        Mockito.when(processService.getTasksByQuery(any(), any(), any())).thenReturn(page);
+        Mockito.when(objectMapper.convertValue(any(), any(TypeReference.class))).thenReturn(list);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> commentService.createComment(commentDTO));
     }
 
 }
