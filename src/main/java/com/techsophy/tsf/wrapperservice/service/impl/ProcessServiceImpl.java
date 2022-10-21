@@ -20,10 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.techsophy.tsf.wrapperservice.config.TokenConfig.getBearerToken;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
@@ -414,13 +411,11 @@ public class ProcessServiceImpl implements ProcessService
     }
 
     @Override
-    public void deleteProcessById(DeleteTaskDTO deleteTaskDTO) throws JsonProcessingException
+    public void deleteProcessById(String ticketNumber,String id) throws JsonProcessingException
     {
-        Map<String,Object> formDataMap=new HashMap<>();
-        String ticketValue=deleteTaskDTO.getTicketNumder();
         Map<String,String> ticketData =new HashMap<>();
-        String ticketNumber="Review Ticket-"+ticketValue;
-        ticketData.put("name",ticketNumber);
+        String ticketNumberValue ="Review Ticket-"+ticketNumber;
+        ticketData.put("name", ticketNumberValue);
         String ticketDetailsUrl=gatewayURI+camundaServletContextPath+ENGINE_REST+TASK;
         UriComponentsBuilder uriComponentsBuilder1 = UriComponentsBuilder.fromHttpUrl(ticketDetailsUrl);
         HttpHeaders httpHeaders1 = new HttpHeaders();
@@ -438,28 +433,24 @@ public class ProcessServiceImpl implements ProcessService
         HttpEntity<?> deletehttpEntity = new HttpEntity<Object>(null, deletehttpHeaders);
         ResponseEntity<Object> response = restTemplate.exchange(uriComponentsBuilder2.toUriString(), HttpMethod.DELETE, deletehttpEntity, Object.class);
 
-        //           if(response.getStatusCode().is2xxSuccessful())
-//           {
-//               String formDataUpdateUrl=gatewayURI+FORM_DATA_UPDATE_URL;
-//               StatusCodeUpdateDTO statusCodeUpdateDTO=new StatusCodeUpdateDTO();
-//               Map<String,Object> formData=new HashMap<>();
-//               formData.put("ticketNumber",deleteTaskDTO.getTicketNumder());
-//               formData.put("ticketType",deleteTaskDTO.getTicketType());
-//               formData.put("ticketDescription",deleteTaskDTO.getTicketDescription());
-//               formData.put("emailId",deleteTaskDTO.getEmailId());
-//               formData.put("mobileNumber",deleteTaskDTO.getMobileNumber());
-//               formData.put("createdOn",deleteTaskDTO.getTicketNumder());
-//               formData.put("status","Cancel");
-//               statusCodeUpdateDTO.setId("959323698389225472");
-//               statusCodeUpdateDTO.setFormData(formData);
-//               UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(formDataUpdateUrl);
-//               HttpHeaders formDataHttpHeaders = new HttpHeaders();
-//               httpHeaders1.add(HttpHeaders.AUTHORIZATION, getBearerToken());
-//               httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
-//               HttpEntity<?> formDataHttpEntity = new HttpEntity<Object>(statusCodeUpdateDTO, formDataHttpHeaders);
-//               ResponseEntity formDataResponse = restTemplate.exchange(uriComponentsBuilder1.toUriString(), HttpMethod.POST, formDataHttpEntity, Object.class);
-//
-//           }
+        if(response.getStatusCode().is2xxSuccessful())
+           {
+               StatusCodeUpdateDTO statusCodeUpdateDTO = new StatusCodeUpdateDTO();
+               statusCodeUpdateDTO.setFormId("951380543294529536");
+               statusCodeUpdateDTO.setId(id);
+               Map<String, Object> formData = new HashMap<>();
+               formData.put("status","Cancelled");
+               statusCodeUpdateDTO.setFormData(formData);
+               String apiData = objectMapper
+                       .writeValueAsString(statusCodeUpdateDTO);
+               String updateUrl=gatewayURI+FORM_DATA_UPDATE_URL;
+               UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(updateUrl);
+               HttpHeaders httpHeaders = new HttpHeaders();
+               httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+               httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+               HttpEntity<?> httpEntity = new HttpEntity<Object>(apiData,httpHeaders);
+               ResponseEntity responseEntity = restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.PATCH, httpEntity, Object.class);
+           }
     }
 
     @Override
@@ -476,17 +467,4 @@ public class ProcessServiceImpl implements ProcessService
         return this.objectMapper.convertValue(response.getBody(), new TypeReference<>() {
         });
     }
-
-
-//    @Override
-//    public void deleteProcessById( ) throws JsonProcessingException
-//    {
-//        String ticketDetailsUrl=gatewayURI+camundaServletContextPath+
-//
-//        String url=gatewayURI+camundaServletContextPath+DELETE_TASK_BY_PROCESS_INSTANCE_ID;
-//
-//
-//    }
-
-
 }

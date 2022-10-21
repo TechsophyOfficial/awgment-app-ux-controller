@@ -28,4 +28,8 @@ public final class ApplicationConstants
     public static final Boolean USEDEFAULTCODEMESSAGE = true;
     public static final String CHECKLIST_ITEM_INSTANCE_COMPLETION_URL = "/checklist-engine/v1/checklist-item-instances/complete";
     public static final String VARIABLE_INSTANCE = "/engine-rest/history/variable-instance";
+    public static final String TICKET_NUMBER="ticketNumber";
+    public static final String TICKET_NUMBER_PATH_VARIABLE="/{ticketNumber}";
+
+
 }

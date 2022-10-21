@@ -1,0 +1,25 @@
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth-playground.techsophy.com/auth/realms/techsophy-platform
+
+gateway:
+  uri: https://api-playground.techsophy.com
+keycloak:
+  issuer-uri: https://auth-playground.techsophy.com/auth/realms/
+
+
+camunda-engine.servlet.context-path : /camunda
+
+springfox:
+  documentation:
+    swaggerUi:
+      baseUrl: /workflow/v1
+    openApi:
+      v3:
+        path: /workflow/v1/openapi/v3/api-docs
+    swagger:
+      v2:
+        path: /workflow/v1/swagger/v2/api-docs

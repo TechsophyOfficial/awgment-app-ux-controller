@@ -99,6 +99,6 @@ public interface ProcessService
 
 
     void completeTaskWithChecklistItemId(ChecklistItemInstanceDTO checklistItemInstanceDTO) throws JsonProcessingException;
-    void deleteProcessById(DeleteTaskDTO deleteTaskDTO)throws JsonProcessingException;
+    void deleteProcessById(String ticketNumber,String id)throws JsonProcessingException;
     PaginationDTO<List<HistoricInstanceDTO>> getHistoryTasksByQuery(HistoricQueryInstanceDTO historicQueryInstanceDTO, Integer page, Integer size) throws JsonProcessingException;
 }
