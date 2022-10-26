@@ -414,5 +414,17 @@ public class ProcessServiceTest {
 
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
+
+    @Test
+    void deleteProcessById() throws JsonProcessingException {
+        Map<String, Object> map = Map.of("key", "val");
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(restTemplate.exchange(anyString(), any(), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getBody()).thenReturn(List.of(map));
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
+
+        processService.deleteProcessById("no", "id");
+        verify(restTemplate, times(3)).exchange(anyString(), any(), any(), eq(Object.class));
+    }
 }
 
