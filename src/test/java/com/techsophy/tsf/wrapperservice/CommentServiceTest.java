@@ -95,8 +95,9 @@ public class CommentServiceTest {
         Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
         Mockito.when(objectMapper.convertValue(any(), eq(ApiResponse.class))).thenReturn(apiResponse);
 
-        commentService.createComment(commentDTO);
-        verify(apiResponse, times(1)).getData();
+        Map<String, Object> actualOutput = commentService.createComment(commentDTO);
+        Map<String, Object> expectedOutput = objectMapper.convertValue(apiResponse.getData(), Map.class);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
@@ -112,16 +113,17 @@ public class CommentServiceTest {
     @Test
     void createCommentTestWhileCommentDtoIsNull(){
         ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        Map<String, Object> expectedOutput = objectMapper.convertValue(response, Map.class);
         TaskModel task = Mockito.mock(TaskModel.class);
         CommentDTO commentDTO = new CommentDTO(null, null, "bKey", "comment");
         PaginationDTO<List<TaskInstanceDTO>> page = new PaginationDTO<>(List.of(taskInstanceDTO), 1, 1, 1, 1l, 1l);
         Mockito.when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class))).thenReturn(response);
-        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
         Mockito.when(processService.getTasksByQuery(any(), any(), any())).thenReturn(page);
         Mockito.when(objectMapper.convertValue(any(), any(TypeReference.class))).thenReturn(List.of(task));
 
-        commentService.createComment(commentDTO);
-        verify(objectMapper, times(1)).convertValue(any(), eq(Map.class));
+        Map<String, Object> actualOutput = commentService.createComment(commentDTO);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
