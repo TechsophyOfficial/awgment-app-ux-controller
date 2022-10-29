@@ -28,7 +28,9 @@ import java.util.Map;
 import static com.techsophy.tsf.wrapperservice.config.TokenConfig.getBearerToken;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.*;
+import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.DELETE_TASK_BY_PROCESS_INSTANCE_ID;
 import static com.techsophy.tsf.wrapperservice.constants.ErrorConstants.NULL_OR_EMPTY_TASK_ID;
+import static com.techsophy.tsf.wrapperservice.constants.ErrorConstants.UNABLE_TO_FIND_THE_TASK;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;
 import static javax.swing.UIManager.get;
 
@@ -411,6 +413,62 @@ public class ProcessServiceImpl implements ProcessService
             throw new IllegalArgumentException("Complete all pending item-instances");
         }
 
+    }
+
+    @Override
+    public void deleteProcessById(String ticketNumber,String id) throws JsonProcessingException
+    {
+        String processInstanceId="";
+        Map<String,String> ticketData =new HashMap<>();
+        String ticketNumberValue =REVIEW_TICKET+ticketNumber;
+        ticketData.put(NAME, ticketNumberValue);
+        String ticketDetailsUrl=gatewayURI+camundaServletContextPath+ENGINE_REST+TASK;
+        UriComponentsBuilder uriComponentsBuilder1 = UriComponentsBuilder.fromHttpUrl(ticketDetailsUrl);
+        HttpHeaders httpHeaders1 = new HttpHeaders();
+        httpHeaders1.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+        httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> httpEntity1 = new HttpEntity<Object>(ticketData,httpHeaders1);
+        ResponseEntity responseEntity1 = restTemplate.exchange(uriComponentsBuilder1.toUriString(), HttpMethod.POST, httpEntity1, Object.class);
+        List<Map<String,Object>> responseEntity1Body = (List<Map<String, Object>>) responseEntity1.getBody();
+        try {
+            processInstanceId = String.valueOf(responseEntity1Body.get(0).get(PROCESS_INSTANCE_ID));
+        }
+        catch(Exception ex)
+        {
+            throw new TaskNotExitsException(TASK_NOT_EXIST,UNABLE_TO_FIND_THE_TASK);
+
+        }
+        String deleteTicketUrl=gatewayURI+camundaServletContextPath+ENGINE_REST+DELETE_TASK_BY_PROCESS_INSTANCE_ID+processInstanceId;
+        UriComponentsBuilder uriComponentsBuilder2 = UriComponentsBuilder.fromHttpUrl(deleteTicketUrl);
+        HttpHeaders deletehttpHeaders = new HttpHeaders();
+        deletehttpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+        deletehttpHeaders.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<?> deletehttpEntity = new HttpEntity<Object>(null, deletehttpHeaders);
+        ResponseEntity<Object> response = restTemplate.exchange(uriComponentsBuilder2.toUriString(), HttpMethod.DELETE, deletehttpEntity, Object.class);
+
+        if(response.getStatusCode().is2xxSuccessful())
+        {
+            StatusCodeUpdateDTO statusCodeUpdateDTO = new StatusCodeUpdateDTO();
+            statusCodeUpdateDTO.setFormId(DELETE_TASK_FORM_ID);
+            statusCodeUpdateDTO.setId(id);
+            Map<String, Object> formData = new HashMap<>();
+            formData.put(STATUS,CANCELLED);
+            statusCodeUpdateDTO.setFormData(formData);
+            String apiData = objectMapper
+                    .writeValueAsString(statusCodeUpdateDTO);
+            String updateUrl=gatewayURI+FORM_DATA_UPDATE_URL;
+            UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(updateUrl);
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
+            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<?> httpEntity = new HttpEntity<Object>(apiData,httpHeaders);
+
+            try {
+                restTemplate.exchange(uriBuilder.toUriString(), HttpMethod.PATCH, httpEntity, Object.class);
+            } catch (Exception ex) {
+                throw new DeleteTaskException(ex.getMessage(), ex.getMessage());
+            }
+        }
     }
 
     @Override

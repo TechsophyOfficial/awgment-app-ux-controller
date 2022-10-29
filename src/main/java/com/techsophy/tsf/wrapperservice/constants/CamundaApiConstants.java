@@ -75,4 +75,5 @@ public class CamundaApiConstants
     public static final String ALLTASKCASEINSTANCEID="?caseInstanceId=";
     public static final String ALL_TASK_CASE_INSTANCE=ENGINE_REST+"/case-instance/";
 
+    public static final String DELETE_TASK_BY_PROCESS_INSTANCE_ID = "/process-instance/";
 }

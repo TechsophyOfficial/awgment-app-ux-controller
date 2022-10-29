@@ -104,5 +104,16 @@ public class MessageConstants
     public static final String GET_MY_TASKS_HISTORY_SUCCESS = " My tasks history fetched successfully";
     public static final String GET_MY_TASKS_SUCCESS = " Task fetched successfully";
 
+    public static final String FORM_DATA_UPDATE_URL = "/form-runtime/v1/form-data";
+    public static final String FORM_DATA_GET_URL = "/form-runtime/v1/form-data?formId=951380543294529536";
+
+    public static final String NAME="name";
+    public static final String STATUS="status";
+    public static final String CANCELLED="Cancelled";
+    public static final String PROCESS_INSTANCE_ID="processInstanceId";
+    public static final String REVIEW_TICKET="Review Ticket-";
+    public static final String TASK_NOT_EXIST ="Ticket not exist";
+    public static final String DELETE_TASK_FORM_ID="951380543294529536";
+
 
 }
