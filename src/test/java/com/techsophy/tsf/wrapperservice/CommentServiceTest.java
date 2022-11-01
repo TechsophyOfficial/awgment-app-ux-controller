@@ -36,7 +36,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class CommentServiceTest {
+class CommentServiceTest {
     @Mock
     RestTemplate restTemplate;
     @Mock

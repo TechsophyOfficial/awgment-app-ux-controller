@@ -8,9 +8,11 @@ public class ApplicationEndpointConstants
 {
     public static final String BASEURL = "/workflow";
     public static final String VERSION_1 = "/v1";
+    public static final String TASKCONSTANT ="/task";
     public static final String TASKS = "/tasks";
+    public static final String COMPLETE="/complete";
     public static final String HISTORY_TASKS = "/history/tasks";
-    public static final String COMPLETE_TASK = TASKS + "/complete";
+    public static final String COMPLETE_TASK = TASKS + COMPLETE;
     public static final String TASKS_COUNT = TASKS + "/count";
     public static final String START_PROCESS = "/process/start";
     public static final String DEPLOY_PROCESS = "/deploy";
@@ -20,7 +22,7 @@ public class ApplicationEndpointConstants
     public static final String SAVE_REQUESTPARAM_NAME="name";
     public static final String FILE="file";
     public static final String ENGINE_REST = "/engine-rest";
-    public static final String TASK = ENGINE_REST+"/task";
+    public static final String TASK = ENGINE_REST + TASKCONSTANT;
 
     public static final String URL_SEPERATOR="/";
 
@@ -55,11 +57,9 @@ public class ApplicationEndpointConstants
     public static final String IDENTITY_LINK = "/identity-links";
     public static final String DELETE = "/delete";
     public static final String TASK_HISTORY_USER_OPERATION= "/history/user-operation";
-    public static final String TASKCONSTANT ="/task";
     public static final String FILTER_ID ="id";
     public static final String MY_TASKS ="/mytasks";
 
-    public static final String COMPLETE="/complete";
     public static final String CHECKLIST_ITEM="/checklist-item-instances";
 
 

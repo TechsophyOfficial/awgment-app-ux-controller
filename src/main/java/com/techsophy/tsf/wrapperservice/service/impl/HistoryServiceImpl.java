@@ -51,7 +51,6 @@ public class HistoryServiceImpl implements HistoryService
     public HistoryResponseDTO historyCount(HistoryDTO historyDTO) throws JsonProcessingException {
         String url = gatewayURI + camundaServletContextPath + GET_TASK_COUNT_HISTORY;
         WebClient webClient=webClientWrapper.createWebClient(accountUtils.getTokenFromContext());
-      //  String data = this.objectMapper.writeValueAsString(historyDTO);
         String response = webClientWrapper.webclientRequest(webClient,url,POST,historyDTO);
         if(StringUtils.isNotEmpty(response))
         {

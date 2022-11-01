@@ -12,5 +12,8 @@ public class ErrorConstants
     public static final String UNABLE_TO_FETCH_CASE_INSTANCE_BY_ID="AWGMENT-UX-CONTROLLER-1007";
     public static final String UNABLE_TO_FETCH_ALL_TASKS = "AWGMENT-UX-CONTROLLER-1008";
 
+    private ErrorConstants () {
+
+    }
 
 }

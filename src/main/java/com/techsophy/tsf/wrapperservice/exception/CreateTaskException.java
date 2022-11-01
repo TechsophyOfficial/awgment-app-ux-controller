@@ -1,8 +1,8 @@
 package com.techsophy.tsf.wrapperservice.exception;
 
 public class CreateTaskException extends RuntimeException{
-    String errorcode;
-    String message;
+    final String errorcode;
+    final String message;
     public CreateTaskException(String errorCode, String message)
     {
         super(errorCode);

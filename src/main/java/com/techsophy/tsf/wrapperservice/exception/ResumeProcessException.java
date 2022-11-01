@@ -1,8 +1,8 @@
 package com.techsophy.tsf.wrapperservice.exception;
 
 public class ResumeProcessException extends RuntimeException{
-    String errorCode;
-    String message;
+    final String errorCode;
+    final String message;
     public ResumeProcessException(String errorCode, String message)
     {
         super(errorCode);

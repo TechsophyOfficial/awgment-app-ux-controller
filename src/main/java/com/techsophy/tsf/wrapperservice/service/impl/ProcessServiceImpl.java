@@ -10,6 +10,8 @@ import com.techsophy.tsf.wrapperservice.exception.*;
 import com.techsophy.tsf.wrapperservice.service.ProcessService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.core.io.ByteArrayResource;
@@ -30,7 +32,6 @@ import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.ErrorConstants.NULL_OR_EMPTY_TASK_ID;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;
-import static javax.swing.UIManager.get;
 
 @RefreshScope
 @Service
@@ -44,6 +45,7 @@ public class ProcessServiceImpl implements ProcessService
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final GlobalMessageSource  globalMessageSource;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /**
      * get task by Id
@@ -228,7 +230,7 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 objectMapper.writeValueAsString(updateTaskDto), httpHeaders);
         try
         {
@@ -253,7 +255,7 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 objectMapper.writeValueAsString(new UserTaskActivityDTO(userTaskActivityWrapperDTO.getTaskId(), userTaskActivityWrapperDTO.getAssignee())), httpHeaders);
         try
         {
@@ -261,7 +263,7 @@ public class ProcessServiceImpl implements ProcessService
         }
         catch (Exception e)
         {
-            throw new RuntimeException(CLAIM_TASK_FAILED + userTaskActivityWrapperDTO.getTaskId());
+            throw new IllegalArgumentException(CLAIM_TASK_FAILED + userTaskActivityWrapperDTO.getTaskId());
         }
     }
 
@@ -278,7 +280,7 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 objectMapper.writeValueAsString(new UserTaskActivityDTO(userTaskActivityWrapperDTO.getTaskId(), userTaskActivityWrapperDTO.getAssignee())), httpHeaders);
         try
         {
@@ -286,7 +288,7 @@ public class ProcessServiceImpl implements ProcessService
         }
         catch (Exception e)
         {
-            throw new RuntimeException(SET_ASSIGNEE_FAILED + userTaskActivityWrapperDTO.getTaskId());
+            throw new IllegalArgumentException(SET_ASSIGNEE_FAILED + userTaskActivityWrapperDTO.getTaskId());
         }
     }
 
@@ -304,12 +306,11 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 objectMapper.writeValueAsString(taskDto), httpHeaders);
         try {
             restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, Object.class);
         } catch (Exception ex) {
-            System.out.println(ex.getMessage());
             throw new CreateTaskException(ex.getMessage(), ex.getMessage());
         }
 
@@ -322,7 +323,7 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 objectMapper.writeValueAsString(identityLinksDto), httpHeaders);
         try {
             restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, Object.class);
@@ -350,7 +351,7 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 objectMapper.writeValueAsString(identityLinksDto), httpHeaders);
         try {
             restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, Object.class);
@@ -380,10 +381,10 @@ public class ProcessServiceImpl implements ProcessService
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<?> httpEntity = new HttpEntity<Object>(
+        HttpEntity<Object> httpEntity = new HttpEntity<>(
                 checklistItemInstanceDTO, httpHeaders);
-        ResponseEntity responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, httpEntity, Object.class);
-        ApiResponse apiResponse = this.objectMapper.convertValue(responseEntity.getBody(),ApiResponse.class);
+        ResponseEntity<?> responseEntity = restTemplate.exchange(builder.toUriString(), HttpMethod.PUT, httpEntity, Object.class);
+        ApiResponse<?> apiResponse = this.objectMapper.convertValue(responseEntity.getBody(),ApiResponse.class);
 
         // getting task completed
         if(((LinkedHashMap) apiResponse.getData()).get("status")!=null && ((LinkedHashMap) apiResponse.getData()).get("status").equals("Complete"))
@@ -398,8 +399,8 @@ public class ProcessServiceImpl implements ProcessService
             HttpHeaders httpHeaders1 = new HttpHeaders();
             httpHeaders1.add(HttpHeaders.AUTHORIZATION, getBearerToken());
             httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<?> httpEntity1 = new HttpEntity<Object>(variable,httpHeaders1);
-            ResponseEntity responseEntity1 = restTemplate.exchange(uriComponentsBuilder.toUriString(), HttpMethod.POST, httpEntity1, Object.class);
+            HttpEntity<Object> httpEntity1 = new HttpEntity<>(variable,httpHeaders1);
+            ResponseEntity<?> responseEntity1 = restTemplate.exchange(uriComponentsBuilder.toUriString(), HttpMethod.POST, httpEntity1, Object.class);
             List<Map<String,Object>> responseEntity1Body = (List<Map<String, Object>>) responseEntity1.getBody();
             Map<String,Object> map2 = responseEntity1Body.get(0);
             String taskId = map2.get("taskId").toString();

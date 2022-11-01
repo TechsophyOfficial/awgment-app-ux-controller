@@ -7,8 +7,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper=false)
 public class InvalidInputException extends RuntimeException
 {
-    String errorCode;
-    String message;
+    final String errorCode;
+    final String message;
     public InvalidInputException(String errorCode, String message)
     {
         super(message);

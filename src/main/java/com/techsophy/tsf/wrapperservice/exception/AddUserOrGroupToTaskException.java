@@ -1,8 +1,8 @@
 package com.techsophy.tsf.wrapperservice.exception;
 
 public class AddUserOrGroupToTaskException extends RuntimeException {
-    String errorcode;
-    String message;
+    final String errorcode;
+    final String message;
     public  AddUserOrGroupToTaskException(String errorCode, String message)
     {
         super(errorCode);

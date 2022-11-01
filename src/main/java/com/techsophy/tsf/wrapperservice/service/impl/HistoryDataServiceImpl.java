@@ -46,14 +46,10 @@ public class HistoryDataServiceImpl implements HistoryDataService {
 
         String url = gatewayURI + camundaServletContextPath + GET_TASK_DATA_HISTORY;
         WebClient webClient=webClientWrapper.createWebClient(accountUtils.getTokenFromContext());
-        //  String data = this.objectMapper.writeValueAsString(historyDTO);
         String response = webClientWrapper.webclientRequest(webClient,url+FIRSTRESULT+firstResult+MAXRESULT+maxResult,POST,historyDataDTO);
         if(StringUtils.isNotEmpty(response))
         {
-
-            List<HistoryDataResponseDTO> historyDataResponseDTO = this.objectMapper.readValue(response,List.class);
-            return  historyDataResponseDTO;
-
+            return  this.objectMapper.readValue(response,List.class);
         }
         throw new InvalidInputException(UNABLE_TO_RETRIEVE_COUNT,globalMessageSource.get(UNABLE_TO_RETRIEVE_COUNT));
     }

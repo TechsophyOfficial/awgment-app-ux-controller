@@ -1,15 +1,11 @@
 package com.techsophy.tsf.wrapperservice.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants;
 import com.techsophy.tsf.wrapperservice.dto.ApiResponse;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryResponseDTO;
-import com.techsophy.tsf.wrapperservice.dto.TaskHistoryDto;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;

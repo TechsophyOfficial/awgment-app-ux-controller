@@ -1,8 +1,8 @@
 package com.techsophy.tsf.wrapperservice.exception;
 
 public class DeleteIdentityLinkException extends RuntimeException {
-    String errorcode;
-    String message;
+    final String errorcode;
+    final String message;
     public DeleteIdentityLinkException(String errorCode, String message)
     {
         super(errorCode);

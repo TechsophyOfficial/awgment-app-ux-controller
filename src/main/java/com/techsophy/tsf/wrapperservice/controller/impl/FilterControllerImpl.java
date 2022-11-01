@@ -8,6 +8,9 @@ import com.techsophy.tsf.wrapperservice.service.FilterService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
 @AllArgsConstructor
 public class FilterControllerImpl implements FilterController
@@ -20,7 +23,7 @@ public class FilterControllerImpl implements FilterController
     }
 
     @Override
-    public ApiResponse executeFilter(String id, ExecuteFilterDTO executeFilterDTO, String emptyString, String firstResult, String maxResult, boolean involvedUser) throws JsonProcessingException {
+    public ApiResponse<List<Map<String,Object>>> executeFilter(String id, ExecuteFilterDTO executeFilterDTO, String emptyString, String firstResult, String maxResult, boolean involvedUser) throws JsonProcessingException {
         return new ApiResponse<>(this.filterService.executeFilter(id,executeFilterDTO,emptyString,firstResult,maxResult,involvedUser), true, MessageConstants.EXECUTE_FILTER_SUCCESS);
     }
     @Override
@@ -31,7 +34,7 @@ public class FilterControllerImpl implements FilterController
     }
 
     @Override
-    public ApiResponse FilterCount(String id,FilterCountDTO filterCountDTO) throws JsonProcessingException
+    public ApiResponse filterCount(String id,FilterCountDTO filterCountDTO) throws JsonProcessingException
     {
         return new ApiResponse<>(this.filterService.filterCount(id,filterCountDTO), true, MessageConstants.GET_FILTER_COUNT_SUCCESS);
 
