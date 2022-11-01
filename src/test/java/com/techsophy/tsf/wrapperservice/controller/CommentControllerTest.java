@@ -2,16 +2,16 @@ package com.techsophy.tsf.wrapperservice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants;
+import com.techsophy.tsf.wrapperservice.constants.MessageConstants;
 import com.techsophy.tsf.wrapperservice.controller.impl.CommentControllerImpl;
+import com.techsophy.tsf.wrapperservice.dto.ApiResponse;
 import com.techsophy.tsf.wrapperservice.dto.CommentDTO;
 import com.techsophy.tsf.wrapperservice.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,48 +36,30 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
-@AutoConfigureMockMvc(addFilters = false)
-@ActiveProfiles("test")
-@ExtendWith({MockitoExtension.class})
-@RequiredArgsConstructor(onConstructor_ = {@Autowired})
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@ExtendWith(MockitoExtension.class)
 public class CommentControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @Autowired
-    WebApplicationContext webApplicationContext;
-    @MockBean
+
+    @Mock
     CommentService commentService;
+
     @InjectMocks
     CommentControllerImpl commentController;
-    @BeforeEach
-    public void setUp()
-    {
-        mockMvc = MockMvcBuilders
-                .webAppContextSetup(webApplicationContext)
-                .build();
+
+    @Test
+    void createCommentTest(){
+        CommentDTO commentDTO = new CommentDTO("task_id", "p_id", "b_key", "test_comment");
+        Mockito.when(commentService.createComment(commentDTO)).thenReturn(Map.of("key", "val"));
+        ApiResponse<Map<String, Object>> actualOutput = commentController.createComment(commentDTO);
+        ApiResponse<Map<String, Object>> expectedOutput = new ApiResponse<>(commentService.createComment(commentDTO), true, MessageConstants.CREATE_COMMENT_SUCCESS);
+        Assertions.assertEquals(expectedOutput, actualOutput);
     }
-//    @Test
-//    void createComment() throws Exception
-//    {   ObjectMapper objectMapperTest=new ObjectMapper();
-//        Map<String,Object> map = new HashMap<>();
-//        CommentDTO commentDTO = new CommentDTO("abc","abc","abc","abc");
-//        when(commentService.createComment(any())).thenReturn(map);
-//        RequestBuilder requestBuilderTest = MockMvcRequestBuilders.post(BASEURL + ApplicationEndpointConstants.VERSION_1 + COMMENTS)
-//                .content(objectMapperTest.writeValueAsString(commentDTO)).contentType(MediaType.APPLICATION_JSON);
-//        MvcResult mvcResult = this.mockMvc.perform(requestBuilderTest).andExpect(status().isOk()).andReturn();
-//        assertEquals(200,mvcResult.getResponse().getStatus());
-//    }
-//    @Test
-//    void getCommentsTest() throws Exception
-//    {
-//
-//        ObjectMapper objectMapperTest = new ObjectMapper();
-//        Mockito.when(commentService.getComments("abc","abc","abc")).thenReturn(new Object());
-//        RequestBuilder requestBuilderTest = MockMvcRequestBuilders.get(ApplicationEndpointConstants.BASEURL+ ApplicationEndpointConstants.VERSION_1+ApplicationEndpointConstants.COMMENTS,1)
-//                .contentType(MediaType.APPLICATION_JSON);
-//        MvcResult mvcResult = this.mockMvc.perform(requestBuilderTest).andExpect(status().isOk()).andReturn();
-//        assertEquals(200,mvcResult.getResponse().getStatus());
-//    }
+
+    @Test
+    void getCommentsTest(){
+        String processInstanceId = "p_id", caseInstanceId = "c_id", businessKey = "b_key";
+        Mockito.when(commentService.getComments(processInstanceId,caseInstanceId, businessKey)).thenReturn("object");
+        ApiResponse<Object> actualOutput = commentController.getComments(processInstanceId, caseInstanceId, businessKey);
+        ApiResponse<Object> expectedOutput = new ApiResponse<>(commentService.getComments(processInstanceId,caseInstanceId, businessKey), true, MessageConstants.GET_COMMENTS_SUCCESS);
+        Assertions.assertEquals(expectedOutput, actualOutput);
+    }
 }
