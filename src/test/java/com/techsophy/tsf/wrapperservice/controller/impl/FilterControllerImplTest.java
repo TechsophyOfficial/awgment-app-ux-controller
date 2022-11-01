@@ -68,7 +68,7 @@ class FilterControllerImplTest {
         FilterCountDTO filterCountDTO = Mockito.mock(FilterCountDTO.class);
         FilterCountResponseDTO filterCountResponseDTO = Mockito.mock(FilterCountResponseDTO.class);
         Mockito.when(filterService.filterCount(id,filterCountDTO)).thenReturn(filterCountResponseDTO);
-        ApiResponse actualOutput = filterController.FilterCount(id, filterCountDTO);
+        ApiResponse actualOutput = filterController.filterCount(id, filterCountDTO);
         ApiResponse expectedOutput = new ApiResponse<>(filterService.filterCount(id,filterCountDTO), true, MessageConstants.GET_FILTER_COUNT_SUCCESS);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }

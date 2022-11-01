@@ -103,7 +103,7 @@ public class ProcessControllerImpl implements ProcessController {
     @Override
     public ApiResponse<Void> claimTask(UserTaskActivityWrapperDTO userTaskActivityWrapperDTO) {
         this.processService.claimTask(userTaskActivityWrapperDTO);
-        return new ApiResponse(null, true, CLAIM_TASK_SUCCESS);
+        return new ApiResponse<>(null, true, CLAIM_TASK_SUCCESS);
     }
 
     /**
@@ -115,7 +115,7 @@ public class ProcessControllerImpl implements ProcessController {
     @Override
     public ApiResponse<Void> setAssigneeToTask(UserTaskActivityWrapperDTO userTaskActivityWrapperDTO) {
         this.processService.setAssignee(userTaskActivityWrapperDTO);
-        return new ApiResponse(null, true, SET_ASSIGNEE_SUCCESS);
+        return new ApiResponse<>(null, true, SET_ASSIGNEE_SUCCESS);
     }
 
     /**
@@ -170,7 +170,7 @@ public class ProcessControllerImpl implements ProcessController {
     @Override
     public ApiResponse<Void> completeTaskWithChecklistItemInstanceId(ChecklistItemInstanceDTO checklistItemInstanceDTO) throws JsonProcessingException {
         this.processService.completeTaskWithChecklistItemId(checklistItemInstanceDTO);
-        return new ApiResponse(null, true, "Task Completed successfully");
+        return new ApiResponse<>(null, true, "Task Completed successfully");
     }
 
 }

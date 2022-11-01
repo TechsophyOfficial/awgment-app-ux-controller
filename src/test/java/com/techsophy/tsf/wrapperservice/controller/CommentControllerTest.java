@@ -37,7 +37,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
-public class CommentControllerTest {
+class CommentControllerTest {
 
     @Mock
     CommentService commentService;

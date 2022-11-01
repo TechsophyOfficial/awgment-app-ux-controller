@@ -123,7 +123,7 @@ public class TokenUtils
        }
        if( tokenBody == null )
        {
-           throw new Exception(INVALID_TOKEN);
+           throw new IllegalArgumentException(INVALID_TOKEN);
        }
        if(tokenBody.containsKey(ISS))
        {

@@ -6,10 +6,7 @@ import com.techsophy.tsf.wrapperservice.controller.impl.ProcessControllerImpl;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.service.ProcessService;
 import lombok.RequiredArgsConstructor;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -41,7 +38,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ExtendWith({MockitoExtension.class})
 @RequiredArgsConstructor(onConstructor_ = {@Autowired})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ProcessControllerTest {
+class ProcessControllerTest {
     @Autowired
     WebApplicationContext webApplicationContext;
     @Autowired
@@ -60,7 +57,10 @@ public class ProcessControllerTest {
     @Test
     void getTaskByIdTest()
     {
-        processController.getTaskById("1");
+        String taskId = "1";
+        ApiResponse<TaskInstanceDTO> actualOutput = processController.getTaskById(taskId);
+        TaskInstanceDTO expectedOutput = mockProcessService.getTaskById(taskId);
+        Assertions.assertEquals(actualOutput.getData(), expectedOutput);
     }
 //    @Test
 //    void completeActiveTaskByBusinessKeyTest() throws Exception
@@ -81,7 +81,9 @@ public class ProcessControllerTest {
         Map<String,Object> variable=new HashMap<>();
         variable.put("abc","abc");
         ProcessInstance processInstance=new ProcessInstance("1","1",variable);
-        processController.startProcessByDefinitionKey(processInstance);
+        ApiResponse<ProcessInstanceResponseDTO> actualOutput = processController.startProcessByDefinitionKey(processInstance);
+        ProcessInstanceResponseDTO expectedOutput = mockProcessService.startProcessByDefinitionKey(processInstance);
+        Assertions.assertEquals(actualOutput.getData(), expectedOutput);
     }
 //    @Test
 //    void getTasksTest() throws Exception
@@ -138,8 +140,11 @@ public class ProcessControllerTest {
     @Test
     void deploy()
     {
+        String name = "abc";
         MockMultipartFile multipartFile = new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
-        processController.deployProcess("abc",multipartFile);
+        ApiResponse<DeployProcessResponseDTO> actualOutput = processController.deployProcess(name,multipartFile);
+        DeployProcessResponseDTO expectedOutput = mockProcessService.deployProcess(name, multipartFile);
+        Assertions.assertEquals(actualOutput.getData(), expectedOutput);
     }
 
 //    @Test

@@ -38,7 +38,7 @@ import static org.springframework.http.HttpMethod.POST;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class ProcessServiceTest {
+class ProcessServiceTest {
     @Mock
     RestTemplate restTemplate;
     @Mock
@@ -259,7 +259,7 @@ public class ProcessServiceTest {
     }
 
     @Test
-    public void completeTaskTest(){
+    void completeTaskTest(){
         GenericDTO genericDTO = Mockito.mock(GenericDTO.class);
 
         processService.completeTask(genericDTO);
@@ -267,7 +267,7 @@ public class ProcessServiceTest {
     }
 
     @Test
-    public void completeTaskTestWhileThrowingException(){
+    void completeTaskTestWhileThrowingException(){
         GenericDTO genericDTO = Mockito.mock(GenericDTO.class);
         Mockito.when(restTemplate.exchange(anyString(), any(HttpMethod.class), any(HttpEntity.class), eq(Object.class))).thenThrow(IllegalArgumentException.class);
 

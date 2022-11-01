@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith({SpringExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @ActiveProfiles("test")
-public class TokenConfigTest {
+class TokenConfigTest {
     @InjectMocks
     TokenConfig tokenConfig;
     @Test
