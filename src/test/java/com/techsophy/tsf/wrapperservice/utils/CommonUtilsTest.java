@@ -1,5 +1,6 @@
 package com.techsophy.tsf.wrapperservice.utils;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
@@ -14,12 +15,15 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 @ActiveProfiles("test")
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class commonUtilsTest {
+class CommonUtilsTest {
     @InjectMocks
     CommonUtils commonUtils;
     @Test
     void isValidStringTest() throws Exception
     {
-        CommonUtils.isValidString("abc");
+        String value = "abc";
+        boolean actualResult = CommonUtils.isValidString(value);
+        boolean expectedResult = value != null && !value.isEmpty() && !value.isBlank();
+        Assertions.assertEquals(expectedResult, actualResult);
     }
 }

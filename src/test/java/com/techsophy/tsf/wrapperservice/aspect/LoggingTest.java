@@ -10,6 +10,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -32,7 +33,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.beforeController(joinPoint);
-        verify(logger, times(1)).info(anyString());
+        verify(logger, times(1)).info(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -40,7 +41,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.afterController(joinPoint);
-        verify(logger, times(1)).info(anyString());
+        verify(logger, times(1)).info(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -48,7 +49,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.beforeService(joinPoint);
-        verify(logger, times(1)).info(anyString());
+        verify(logger, times(1)).info(anyString(), anyString(), anyString());
     }
 
     @Test
@@ -56,7 +57,7 @@ class LoggingTest {
         Mockito.when(joinPoint.getSignature()).thenReturn(signature);
         Mockito.when(signature.getName()).thenReturn("Signature_Name");
         logging.afterService(joinPoint);
-        verify(logger, times(1)).info(anyString());
+        verify(logger, times(1)).info(anyString(), anyString(), anyString());
     }
 
     @Test
