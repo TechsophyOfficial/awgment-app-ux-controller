@@ -414,5 +414,50 @@ class ProcessServiceTest {
 
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
+    @Test
+    void deleteProcessByIdTest() throws JsonProcessingException {
+        Map<String, Object> map = Map.of("key", "val");
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(restTemplate.exchange(anyString(), any(), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getBody()).thenReturn(List.of(map));
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
+
+        processService.deleteProcessById("no", "id");
+        verify(restTemplate, times(3)).exchange(anyString(), any(), any(), eq(Object.class));
+    }
+
+    @Test
+    void deleteProcessByIdTestWhileThrowingException() throws JsonProcessingException {
+        Map<String, Object> map = Map.of("key", "val");
+        UriComponentsBuilder uriBuilder = Mockito.mock(UriComponentsBuilder.class);
+        HttpEntity<?> httpEntity = Mockito.mock(HttpEntity.class);
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(restTemplate.exchange(anyString(), any(), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getBody()).thenReturn(List.of(map));
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.ACCEPTED);
+        Mockito.when(restTemplate.exchange(anyString(), eq(HttpMethod.PATCH), any(), eq(Object.class))).thenThrow(DeleteTaskException.class);
+        Assertions.assertThrows(DeleteTaskException.class, () -> processService.deleteProcessById("no", "id"));
+    }
+
+    @Test
+    void deleteProcessByIdTestWhileTaskNotFound() throws JsonProcessingException {
+        Map<String, Object> map = Mockito.mock(Map.class);
+        List list = List.of(map);
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(restTemplate.exchange(anyString(), any(), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getBody()).thenReturn(list);
+        Mockito.when(map.get(any())).thenThrow(TaskNotExistsException.class);
+        Assertions.assertThrows(TaskNotExistsException.class, () -> processService.deleteProcessById("no", "id"));
+    }
+
+    @Test
+    void deleteProcessByIdTestWhileNotSuccessful() throws JsonProcessingException {
+        Map<String, Object> map = Map.of("key", "val");
+        ResponseEntity response = Mockito.mock(ResponseEntity.class);
+        Mockito.when(restTemplate.exchange(anyString(), any(), any(), eq(Object.class))).thenReturn(response);
+        Mockito.when(response.getBody()).thenReturn(List.of(map));
+        Mockito.when(response.getStatusCode()).thenReturn(HttpStatus.BAD_REQUEST);
+        Assertions.assertThrows(FailedTaskDeletionException.class, () -> processService.deleteProcessById("no", "id"));
+    }
 }
 

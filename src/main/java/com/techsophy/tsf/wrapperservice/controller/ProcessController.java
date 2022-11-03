@@ -12,7 +12,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.PATH_ID;
+import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.COMPLETE_TASK;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationEndpointConstants.DEPLOY_PROCESS;
@@ -158,5 +158,9 @@ public interface ProcessController {
     @PostMapping(CHECKLIST_ITEM+COMPLETE)
     @PreAuthorize(CREATE_OR_ALL_ACCESS)
     ApiResponse<Void>completeTaskWithChecklistItemInstanceId(@RequestBody ChecklistItemInstanceDTO checklistItemInstanceDTO) throws JsonProcessingException;
+
+    @DeleteMapping(TASKS)
+    @PreAuthorize(DELETE_OR_ALL_ACCESS)
+    ApiResponse<Void>deleteProcessById(@RequestParam String ticketNumber, @RequestParam String formDataId) throws JsonProcessingException;
 
 }

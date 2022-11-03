@@ -16,4 +16,10 @@ public class ErrorConstants
 
     }
 
+    public static final String UNABLE_TO_FIND_THE_TASK = "AWGMENT-UX-CONTROLLER-1009";
+    public static final String FAILED_TO_DELETE_THE_TASK = "AWGMENT-UX-CONTROLLER-1010 ";
+
+
+
+
 }
