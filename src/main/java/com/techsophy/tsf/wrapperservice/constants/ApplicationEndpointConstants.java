@@ -41,7 +41,7 @@ public class ApplicationEndpointConstants
 
     //JWTRoleConverter
     public static final String CLIENT_ROLES="clientRoles";
-    public static final String USER_INFO_URL= "techsophy-platform/protocol/openid-connect/userinfo";
+    public static final String USER_INFO_URL= "/protocol/openid-connect/userinfo";
     public static final String GET="GET";
 
     //JWTRoleConverter
