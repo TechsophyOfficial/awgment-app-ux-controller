@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.config;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
 import com.techsophy.tsf.wrapperservice.utils.WebClientWrapper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,6 +37,8 @@ class JWTRoleConverterTest {
     WebClientWrapper webClientWrapper;
     @Mock
     ObjectMapper objectMapper;
+    @Mock
+    TokenUtils tokenUtils;
 
     @InjectMocks
     JWTRoleConverter jwtRoleConverter;
@@ -53,6 +56,7 @@ class JWTRoleConverterTest {
         String userResponce = "userResponse";
         Mockito.when(webClientWrapper.webclientRequest(any(), any(), any(), any())).thenReturn(userResponce);
         Mockito.when(objectMapper.readValue(userResponce, Map.class)).thenReturn(Map.of("key", "val"));
+        Mockito.when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("techsophy-platform");
 
         Collection<GrantedAuthority> actualOutput = jwtRoleConverter.convert(jwt);
         Collection<GrantedAuthority> expectedOutput = (awgmentRolesList).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
@@ -78,6 +82,7 @@ class JWTRoleConverterTest {
         Mockito.when(webClientWrapper.webclientRequest(any(), any(), any(), any())).thenReturn(userResponce);
         Mockito.when(objectMapper.readValue(userResponce,Map.class)).thenReturn(Map.of(CLIENT_ROLES, "val"));
         Mockito.when(objectMapper.convertValue(any(), eq(List.class))).thenReturn(List.of());
+        Mockito.when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("techsophy-platform");
 
         Collection<GrantedAuthority> actualOutput = jwtRoleConverter.convert(jwt);
         Collection<GrantedAuthority> expectedOutput = (awgmentRolesList).stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList());
