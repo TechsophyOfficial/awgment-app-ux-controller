@@ -123,9 +123,9 @@ public class TokenUtils
        }
        if( tokenBody == null )
        {
-           throw new Exception(INVALID_TOKEN);
+           throw new IllegalArgumentException(INVALID_TOKEN);
        }
-       if(tokenBody != null && tokenBody.containsKey(ISS))
+       if(tokenBody.containsKey(ISS))
        {
            List<String> elements= Arrays.asList(tokenBody.get(ISS).toString().split(URL_SEPERATOR));
            tenantName=elements.get(elements.size()-1);

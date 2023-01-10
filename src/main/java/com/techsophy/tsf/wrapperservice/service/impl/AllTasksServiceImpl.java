@@ -39,8 +39,8 @@ public class AllTasksServiceImpl implements AllTasksService {
         String response=webClientWrapper.webclientRequest(webClient,url,POST, allTasksCountDTO);
         if(response.isBlank())
             throw new InvalidInputException(UNABLE_TO_RETRIEVE_COUNT,globalMessageSource.get(UNABLE_TO_RETRIEVE_COUNT));
-        TaskCountDTO result=this.objectMapper.readValue(response,TaskCountDTO.class);
-        return result;
+
+        return this.objectMapper.readValue(response,TaskCountDTO.class);
     }
 
     @Override
@@ -52,8 +52,8 @@ public class AllTasksServiceImpl implements AllTasksService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_ALL_TASKS,globalMessageSource.get(UNABLE_TO_FETCH_GROUP_TASKS));
         }
-        List<AllTasksDTO> result=this.objectMapper.readValue(response,List.class);
-        return result;
+
+        return this.objectMapper.readValue(response,List.class);
     }
 
     @Override
@@ -65,8 +65,8 @@ public class AllTasksServiceImpl implements AllTasksService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_ALL_TASKS,globalMessageSource.get(UNABLE_TO_FETCH_GROUP_TASKS));
         }
-        AllTaskCaseInstanceDTO result=this.objectMapper.readValue(response,AllTaskCaseInstanceDTO.class);
-        return result;
+
+        return this.objectMapper.readValue(response,AllTaskCaseInstanceDTO.class);
     }
 
     @Override
@@ -78,8 +78,8 @@ public class AllTasksServiceImpl implements AllTasksService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_ALL_TASKS,globalMessageSource.get(UNABLE_TO_FETCH_GROUP_TASKS));
         }
-        AllTaskFormsDTO result=this.objectMapper.readValue(response,AllTaskFormsDTO.class);
-        return result;
+
+        return this.objectMapper.readValue(response,AllTaskFormsDTO.class);
     }
 
     @Override
@@ -91,8 +91,8 @@ public class AllTasksServiceImpl implements AllTasksService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_ALL_TASKS,globalMessageSource.get(UNABLE_TO_FETCH_GROUP_TASKS));
         }
-        AllTaskFormVariablesDTO result=this.objectMapper.readValue(response,AllTaskFormVariablesDTO.class);
-        return result;
+
+        return this.objectMapper.readValue(response,AllTaskFormVariablesDTO.class);
     }
 
     @Override
@@ -104,7 +104,7 @@ public class AllTasksServiceImpl implements AllTasksService {
         {
             throw new InvalidInputException(UNABLE_TO_FETCH_ALL_TASKS,globalMessageSource.get(UNABLE_TO_FETCH_GROUP_TASKS));
         }
-        List<CaseActivityInstanceDTO> result=this.objectMapper.readValue(response,List.class);
-        return result;
+
+        return this.objectMapper.readValue(response,List.class);
     }
 }

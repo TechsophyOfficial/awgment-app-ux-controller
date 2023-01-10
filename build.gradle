@@ -30,7 +30,7 @@ tasks.withType(JavaCompile) {
 
 repositories {
      mavenLocal()
-     maven { url "https://repo.maven.apache.org/maven2" }
+    mavenCentral()
 }
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
@@ -66,4 +66,14 @@ dependencies {
 
 jar{
     enabled = false
+}
+
+jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = 0.88
+            }
+        }
+    }
 }

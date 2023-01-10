@@ -56,11 +56,10 @@ public class FilterServiceImpl implements FilterService
 
     @Override
     public List<Map<String, Object>> executeFilter(String id, ExecuteFilterDTO executeFilterDTO, String emptyString, String firstResult, String maxResult, boolean involvedUser) throws JsonProcessingException {
-        String requestURL=" ";
+        String requestURL;
         WebClient webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
-        String loggedInUserDetails =tokenUtils.getLoggedInUserId();
 
-        if((firstResult!=null) && (maxResult!=null) && involvedUser==false )
+        if((firstResult!=null) && (maxResult!=null) && !involvedUser )
         {
             requestURL = gatewayURI + camundaServletContextPath+GET_EXECUTE_FILTER_LIST + URL_SEPERATOR + id + URL_SEPERATOR + LIST + "?"+emptyString+"&"+ FIRST_RESULT + "=" + firstResult + "&" + MAX_RESULTS + "=" + maxResult;
 

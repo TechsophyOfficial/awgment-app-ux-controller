@@ -12,9 +12,7 @@ public class GroupCaseInstanceDTO {
     String isDefault;
     String createdById;
     String createdOn;
-    String createdByName;
     String updatedById;
     String updatedOn;
-    String updatedByName;
 
 }
