@@ -2,8 +2,8 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
-import com.techsophy.tsf.wrapperservice.dto.HistoryDTO;
 import com.techsophy.tsf.wrapperservice.dto.MyTasksDTO;
 import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
 import com.techsophy.tsf.wrapperservice.utils.WebClientWrapper;
@@ -17,7 +17,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Map;
@@ -27,15 +26,15 @@ import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GA
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.CASE_INSTANCE_ID;
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.ENGINE_REST;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class MyTasksServiceImplTest {
 
+    @Mock
+    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     @Mock
     WebClientWrapper webClientWrapper;
     @Mock

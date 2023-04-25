@@ -3,6 +3,7 @@ package com.techsophy.tsf.wrapperservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
 import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
@@ -39,6 +40,9 @@ import static org.springframework.http.HttpMethod.POST;
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProcessServiceTest {
+
+    @Mock
+    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     @Mock
     RestTemplate restTemplate;
     @Mock

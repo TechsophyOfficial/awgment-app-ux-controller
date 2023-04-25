@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDataDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDataResponseDTO;
@@ -24,12 +25,13 @@ import java.util.Map;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GATEWAY_URI_VARIABLE;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 
 @ExtendWith(MockitoExtension.class)
 class HistoryDataServiceImplTest {
+    @Mock
+    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     @Mock
     WebClientWrapper webClientWrapper;
     @Mock

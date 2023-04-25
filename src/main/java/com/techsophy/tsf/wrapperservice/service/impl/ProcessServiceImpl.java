@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.*;
@@ -33,6 +34,8 @@ import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.ErrorConstants.NULL_OR_EMPTY_TASK_ID;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.*;
 
+
+
 @RefreshScope
 @Service
 @RequiredArgsConstructor
@@ -43,6 +46,7 @@ public class ProcessServiceImpl implements ProcessService
     @Value(GATEWAY_URI_VARIABLE)
     private String gatewayURI;
     private final RestTemplate restTemplate;
+    private final UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     private final ObjectMapper objectMapper;
     private final GlobalMessageSource  globalMessageSource;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -59,7 +63,7 @@ public class ProcessServiceImpl implements ProcessService
         {
             throw new MissingMandatoryDataException(NULL_OR_EMPTY_TASK_ID,globalMessageSource.get(NULL_OR_EMPTY_TASK_ID));
         }
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.GET_TASK + "/" + taskId;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.GET_TASK + "/" + taskId;
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
         httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -80,7 +84,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public PaginationDTO<List<TaskInstanceDTO>> getTasksByQuery(TaskQueryDTO taskQueryDTO, Integer page, Integer size)
     {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.GET_ALL_TASK;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.GET_ALL_TASK;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(PAGE, page)
                 .queryParam(SIZE, size);
@@ -96,7 +100,7 @@ public class ProcessServiceImpl implements ProcessService
     @Override
     public PaginationDTO<List<TaskInstanceDTO>> getAllTasks(Integer page, Integer size)
     {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.GET_ALL_TASK;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.GET_ALL_TASK;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(PAGE, page)
                 .queryParam(SIZE, size);
@@ -117,7 +121,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public TaskCountDTO getTasksCount(TaskQueryDTO taskQueryDTO)
     {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.GET_TASK_COUNT;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.GET_TASK_COUNT;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -134,9 +138,9 @@ public class ProcessServiceImpl implements ProcessService
      */
     @Override
     @SneakyThrows({JsonProcessingException.class})
-    public ProcessInstanceResponseDTO startProcessByDefinitionKey(ProcessInstance processInstance)
-           {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.START_PROCESS;
+    public ProcessInstanceResponseDTO startProcessByDefinitionKey(ProcessInstance processInstance) {
+
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.START_PROCESS;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -151,7 +155,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public DeployProcessResponseDTO deployProcess(String name, MultipartFile file)
     {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.DEPLOY_PROCESS;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.DEPLOY_PROCESS;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -179,7 +183,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public void completeTask(GenericDTO genericDTO)
     {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.COMPLETE_TASK;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.COMPLETE_TASK;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -203,7 +207,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public void resumeProcess(ResumeProcessRequestDTO resumeProcessRequestDTO)
     {
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.RESUME_PROCESS;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CamundaApiConstants.RESUME_PROCESS;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -225,7 +229,7 @@ public class ProcessServiceImpl implements ProcessService
         {
             throw new MissingMandatoryDataException(NULL_OR_EMPTY_TASK_ID,globalMessageSource.get(NULL_OR_EMPTY_TASK_ID));
         }
-        String url = gatewayURI + camundaServletContextPath + UPDATE_TASK +"/"+taskId;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + UPDATE_TASK +"/"+taskId;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -250,7 +254,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public void claimTask(UserTaskActivityWrapperDTO userTaskActivityWrapperDTO)
     {
-        String url = gatewayURI + camundaServletContextPath + CLAIM_TASK.replace("{id}", userTaskActivityWrapperDTO.getTaskId());
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CLAIM_TASK.replace("{id}", userTaskActivityWrapperDTO.getTaskId());
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -275,7 +279,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public void setAssignee(UserTaskActivityWrapperDTO userTaskActivityWrapperDTO)
     {
-        String url = gatewayURI + camundaServletContextPath + SET_ASSIGNEE.replace("{id}", userTaskActivityWrapperDTO.getTaskId());
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + SET_ASSIGNEE.replace("{id}", userTaskActivityWrapperDTO.getTaskId());
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -301,7 +305,7 @@ public class ProcessServiceImpl implements ProcessService
     public void createTask(TaskDto taskDto) throws JsonProcessingException {
 
 
-        String url = gatewayURI + camundaServletContextPath + CREATE_TASK;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + CREATE_TASK;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -318,7 +322,7 @@ public class ProcessServiceImpl implements ProcessService
 
     @Override
     public void addUserOrGroupToTask(String taskId, IdentityLinksDto identityLinksDto) throws JsonProcessingException {
-        String url = gatewayURI + camundaServletContextPath + IDENTITY_LINK.replace("{id}", taskId);
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + IDENTITY_LINK.replace("{id}", taskId);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -334,7 +338,7 @@ public class ProcessServiceImpl implements ProcessService
 
     @Override
     public List<IdentityLinksDto> getIdentityLinksOfTask(String taskId) throws JsonProcessingException {
-        String url = gatewayURI + camundaServletContextPath + IDENTITY_LINK.replace("{id}", taskId);
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + IDENTITY_LINK.replace("{id}", taskId);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -346,7 +350,7 @@ public class ProcessServiceImpl implements ProcessService
 
     @Override
     public void deleteIdentityLinkOfTask(String taskId, IdentityLinksDto identityLinksDto) throws JsonProcessingException {
-        String url = gatewayURI + camundaServletContextPath + IDENTITY_LINK_DELETE.replace("{id}", taskId);
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + IDENTITY_LINK_DELETE.replace("{id}", taskId);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -362,7 +366,7 @@ public class ProcessServiceImpl implements ProcessService
 
     @Override
     public List<TaskHistoryDto> getHistoryOfTask(String filter) throws JsonProcessingException {
-        String url = gatewayURI + camundaServletContextPath + TASK_HISTORY_USER_OPERATION + "?" + filter.replace(";", "&");
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + TASK_HISTORY_USER_OPERATION + "?" + filter.replace(";", "&");
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -416,7 +420,7 @@ public class ProcessServiceImpl implements ProcessService
 
     @Override
     public PaginationDTO<List<HistoricInstanceDTO>> getHistoryTasksByQuery(HistoricQueryInstanceDTO historicQueryInstanceDTO, Integer page, Integer size) throws JsonProcessingException {
-        String url = gatewayURI + camundaServletContextPath + GET_ALL_HISTORY_TASK;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + GET_ALL_HISTORY_TASK;
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(PAGE, page)
                 .queryParam(SIZE, size);

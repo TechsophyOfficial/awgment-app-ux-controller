@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.constants.MessageConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
@@ -30,14 +31,14 @@ import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.ENG
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.POST;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.GET;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.URL_SEPERATOR;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class FilterServiceImplTest {
+    @Mock
+    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     @Mock
     TokenUtils tokenUtils;
     @Mock

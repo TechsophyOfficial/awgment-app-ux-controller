@@ -2,11 +2,10 @@ package com.techsophy.tsf.wrapperservice;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
-import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.model.TaskModel;
-import com.techsophy.tsf.wrapperservice.model.TaskQuery;
 import com.techsophy.tsf.wrapperservice.service.ProcessService;
 import com.techsophy.tsf.wrapperservice.service.impl.CommentServiceImpl;
 import org.junit.jupiter.api.*;
@@ -14,7 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,6 +35,8 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CommentServiceTest {
+    @Mock
+    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     @Mock
     RestTemplate restTemplate;
     @Mock

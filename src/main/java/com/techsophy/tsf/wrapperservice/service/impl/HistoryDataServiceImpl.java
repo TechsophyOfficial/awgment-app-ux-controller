@@ -2,10 +2,10 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDataDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDataResponseDTO;
-import com.techsophy.tsf.wrapperservice.dto.HistoryResponseDTO;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
 import com.techsophy.tsf.wrapperservice.service.HistoryDataService;
 import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
@@ -24,7 +24,6 @@ import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.CA
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GATEWAY_URI_VARIABLE;
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.ErrorConstants.UNABLE_TO_RETRIEVE_COUNT;
-import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.BEARER;
 
 @RefreshScope
 @Service
@@ -35,6 +34,7 @@ public class HistoryDataServiceImpl implements HistoryDataService {
     TokenUtils accountUtils;
     ObjectMapper objectMapper;
     GlobalMessageSource globalMessageSource;
+    private final UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
 
@@ -44,7 +44,7 @@ public class HistoryDataServiceImpl implements HistoryDataService {
     @Override
     public List<HistoryDataResponseDTO> historyData(HistoryDataDTO historyDataDTO, Integer firstResult, Integer maxResult) throws JsonProcessingException {
 
-        String url = gatewayURI + camundaServletContextPath + GET_TASK_DATA_HISTORY;
+        String url = gatewayURI + uxControllerCamundaServletContextPath.getCamundaPathUri() + GET_TASK_DATA_HISTORY;
         WebClient webClient=webClientWrapper.createWebClient(accountUtils.getTokenFromContext());
         String response = webClientWrapper.webclientRequest(webClient,url+FIRSTRESULT+firstResult+MAXRESULT+maxResult,POST,historyDataDTO);
         if(StringUtils.isNotEmpty(response))

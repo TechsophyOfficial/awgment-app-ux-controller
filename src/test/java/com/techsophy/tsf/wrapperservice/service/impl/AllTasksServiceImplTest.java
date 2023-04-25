@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
@@ -39,6 +40,9 @@ class AllTasksServiceImplTest {
 
     @InjectMocks
     AllTasksServiceImpl allTasksService;
+
+    @Mock
+    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
 
     AllTasksCountDTO allTasksCountDTO = new AllTasksCountDTO();
 
