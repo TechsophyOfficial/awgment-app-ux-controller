@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
+import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
@@ -30,7 +30,7 @@ public class GroupServiceImpl implements GroupService {
     private final TokenUtils tokenUtils;
     private final ObjectMapper objectMapper;
     private final GlobalMessageSource globalMessageSource;
-    private final UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
+    private final CamundaModifiedPathURL camundaModifiedPathURL;
 
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
@@ -40,7 +40,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public TaskCountDTO groupCount(GroupTaskCountReqDTO groupTaskCountReqDTO) throws JsonProcessingException {
 
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+ GET_GROUP_TASK_COUNT;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GET_GROUP_TASK_COUNT);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response = webClientWrapper.webclientRequest(webClient,url,POST, groupTaskCountReqDTO);
         if(response.isBlank()) {
@@ -52,7 +52,7 @@ public class GroupServiceImpl implements GroupService {
     @Override
     public List<GroupTaskDTO> groupTask(GroupTaskCountReqDTO groupTaskDTO, Integer firstResult, Integer maxResults) throws JsonProcessingException {
 
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+GET_GROUP_TASK+FIRST_RESULT_GROUP_TASK+firstResult+MAX_RESULTS_GROUP_TASK+maxResults;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GET_GROUP_TASK+FIRST_RESULT_GROUP_TASK+firstResult+MAX_RESULTS_GROUP_TASK+maxResults);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,POST,groupTaskDTO);
         if(response.isBlank())
@@ -66,7 +66,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public List<GroupTaskHistoryDTO> groupTaskHistory(String caseInstanceId) throws JsonProcessingException {
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+GROUP_TASK_CASE_INSTANCE+CASE_INSTANCE_ID+caseInstanceId;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GROUP_TASK_CASE_INSTANCE+CASE_INSTANCE_ID+caseInstanceId);
         var webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,caseInstanceId);
         if(response.isBlank())
@@ -79,7 +79,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupCaseInstanceDTO groupCaseInstance(String id) throws JsonProcessingException {
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+GROUP_CASE_INSTANCE+id;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GROUP_CASE_INSTANCE+id);
         var webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
         if(response.isBlank())
@@ -92,7 +92,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupFormDTo groupFormVariables(String id) throws JsonProcessingException {
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+GROUP_FORM_VARIABLE+id+FORM_VARIABLE;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GROUP_FORM_VARIABLE+id+FORM_VARIABLE);
         var webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
         if(response.isBlank())
@@ -105,7 +105,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public AllTaskCaseInstanceDTO groupVariables(String id) throws JsonProcessingException {
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+GROUP_CASE_INSTANCE+id+VARIABLES;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GROUP_CASE_INSTANCE+id+VARIABLES);
         var webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
         if(response.isBlank())
@@ -118,7 +118,7 @@ public class GroupServiceImpl implements GroupService {
 
     @Override
     public GroupTaskCaseDefinition groupCaseDefinition(String id) throws JsonProcessingException {
-        String url=gatewayURI+ uxControllerCamundaServletContextPath.getCamundaPathUri()+GROUP_CASE_DEFINITION+id;
+        String url = camundaModifiedPathURL.getCamundaPathUri(GROUP_CASE_DEFINITION+id);
         var webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
         if(response.isBlank())

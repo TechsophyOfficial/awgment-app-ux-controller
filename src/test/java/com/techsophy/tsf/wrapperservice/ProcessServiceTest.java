@@ -3,7 +3,7 @@ package com.techsophy.tsf.wrapperservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
+import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
 import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
@@ -27,6 +27,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
+import java.sql.Ref;
 import java.util.*;
 
 import static com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants.UPDATE_TASK;
@@ -42,7 +43,7 @@ import static org.springframework.http.HttpMethod.POST;
 class ProcessServiceTest {
 
     @Mock
-    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
+    CamundaModifiedPathURL camundaModifiedPathURL;
     @Mock
     RestTemplate restTemplate;
     @Mock
@@ -63,6 +64,7 @@ class ProcessServiceTest {
     void setUp() {
         ReflectionTestUtils.setField(processService, "camundaServletContextPath", "http://apigateway.techsophy.com");
         ReflectionTestUtils.setField(processService, "gatewayURI", "http://apigateway.techsophy.com");
+        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test

@@ -9,8 +9,10 @@ import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.URL_SEPERATOR;
 
 @Component
-public class UxControllerCamundaServletContextPath {
+public class CamundaModifiedPathURL {
 
+    @Value(GATEWAY_URI_VARIABLE)
+    private String gatewayURI;
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
     @Value(SHARED_WORKFLOW_ENGINE_PATH)
@@ -19,9 +21,8 @@ public class UxControllerCamundaServletContextPath {
     private String defaultRealm;
     @Autowired
     TokenUtils tokenUtils;
-    public String getCamundaPathUri(){
-        String tenant= tokenUtils.getIssuerFromToken(tokenUtils.getTokenFromContext());
-        String camundaPathUri = !defaultRealm.equalsIgnoreCase(tenant) && Boolean.parseBoolean(sharedWorkflowEngine) ? (URL_SEPERATOR + tenant + camundaServletContextPath) : camundaServletContextPath;
-        return camundaPathUri;
+    public String getCamundaPathUri(String relativeUrl) {
+        String tenant = tokenUtils.getIssuerFromToken(tokenUtils.getTokenFromContext());
+        return !defaultRealm.equalsIgnoreCase(tenant) && Boolean.parseBoolean(sharedWorkflowEngine) ? (gatewayURI + URL_SEPERATOR + tenant + camundaServletContextPath + relativeUrl) : gatewayURI + camundaServletContextPath + relativeUrl;
     }
 }

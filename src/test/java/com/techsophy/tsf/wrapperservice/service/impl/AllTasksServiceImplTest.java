@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
+import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
@@ -24,6 +24,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AllTasksServiceImplTest {
@@ -42,7 +43,7 @@ class AllTasksServiceImplTest {
     AllTasksServiceImpl allTasksService;
 
     @Mock
-    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
+    CamundaModifiedPathURL camundaModifiedPathURL;
 
     AllTasksCountDTO allTasksCountDTO = new AllTasksCountDTO();
 
@@ -52,6 +53,7 @@ class AllTasksServiceImplTest {
         ReflectionTestUtils.setField(allTasksService, "gatewayURI", "http://apigateway.techsophy.com");
         allTasksCountDTO.setActive(true);
         allTasksCountDTO.setSorting(List.of(Map.of("key", "val")));
+        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test

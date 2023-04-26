@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.UxControllerCamundaServletContextPath;
+import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.model.TaskModel;
@@ -36,7 +36,7 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CommentServiceTest {
     @Mock
-    UxControllerCamundaServletContextPath uxControllerCamundaServletContextPath;
+    CamundaModifiedPathURL camundaModifiedPathURL;
     @Mock
     RestTemplate restTemplate;
     @Mock
@@ -59,6 +59,7 @@ class CommentServiceTest {
     public void init() {
          ReflectionTestUtils.setField(commentService, "gatewayURI", "https://api-gateway.techsophy.com/api");
          ReflectionTestUtils.setField(commentService, "camundaServletContextPath", "/camunda");
+        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test
