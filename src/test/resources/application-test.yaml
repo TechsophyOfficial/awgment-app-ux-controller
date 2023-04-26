@@ -15,6 +15,12 @@ keycloak:
 
 camunda-engine.servlet.context-path : /camunda
 
+shared-workflow-engine: ${SHARED_WORKFLOW_ENGINE:true}
+
 springdoc:
   api-docs:
     path: workflow/v3/api-docs
+
+database:
+  url: ${TP_MODELER_APP_MONGO_URI}
+  name: techsophy-platform

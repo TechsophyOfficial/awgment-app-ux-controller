@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.MyTasksDTO;
 import com.techsophy.tsf.wrapperservice.service.MyTasksService;
@@ -32,6 +33,7 @@ public class MyTasksServiceImpl implements MyTasksService
     TokenUtils tokenUtils;
     ObjectMapper objectMapper;
     GlobalMessageSource globalMessageSource;
+    private final TenantWorkflowResolver tenantWorkflowResolver;
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
 
@@ -41,7 +43,7 @@ public class MyTasksServiceImpl implements MyTasksService
     @Override
     public String myTasksCount(MyTasksDTO myTasksDTO)
     {
-        String url = gatewayURI + camundaServletContextPath + ENGINE_REST+GET_MY_TASK_COUNT;
+        String url = tenantWorkflowResolver.getCamundaPathUri(ENGINE_REST+GET_MY_TASK_COUNT);
         WebClient webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response = webClientWrapper.webclientRequest(webClient,url,POST, myTasksDTO);
         return objectMapper.convertValue(response,String.class);
@@ -51,7 +53,7 @@ public class MyTasksServiceImpl implements MyTasksService
     public List<Map<String, Object>> getAllTasks(MyTasksDTO myTasksDTO, String firstResult, String maxResult) throws JsonProcessingException
     {
         WebClient webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
-        String requestURL = gatewayURI + camundaServletContextPath+ENGINE_REST+TASK+ "?"+ FIRST_RESULT + "=" + firstResult + "&" + MAX_RESULTS + "=" + maxResult;
+        String requestURL = tenantWorkflowResolver.getCamundaPathUri(ENGINE_REST+TASK+ "?"+ FIRST_RESULT + "=" + firstResult + "&" + MAX_RESULTS + "=" + maxResult);
         String response = webClientWrapper.webclientRequest(webClient,requestURL,POST,myTasksDTO);
         return  this.objectMapper.readValue(response,List.class);
     }
@@ -60,7 +62,7 @@ public class MyTasksServiceImpl implements MyTasksService
     public List<Map<String, Object>> getMyTasksHistory(String caseInstanceId) throws JsonProcessingException
     {
         WebClient webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
-        String requestURL = gatewayURI + camundaServletContextPath+ENGINE_REST+HISTORY+CASE_ACTIVITY_INSTANCE+CASE_INSTANCE_ID+caseInstanceId;
+        String requestURL = tenantWorkflowResolver.getCamundaPathUri(ENGINE_REST+HISTORY+CASE_ACTIVITY_INSTANCE+CASE_INSTANCE_ID+caseInstanceId);
         String response = webClientWrapper.webclientRequest(webClient,requestURL,GET,null);
         return  this.objectMapper.readValue(response,List.class);
     }
@@ -68,7 +70,7 @@ public class MyTasksServiceImpl implements MyTasksService
     @Override
     public Map<String, Object> getMyTasksById(String id) throws JsonProcessingException {
         WebClient webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
-        String requestURL = gatewayURI + camundaServletContextPath+ENGINE_REST+URL_SEPERATOR+CASE_INSTANCE+URL_SEPERATOR+id;
+        String requestURL = tenantWorkflowResolver.getCamundaPathUri(ENGINE_REST+URL_SEPERATOR+CASE_INSTANCE+URL_SEPERATOR+id);
         String response = webClientWrapper.webclientRequest(webClient,requestURL,GET,null);
         return  this.objectMapper.readValue(response,Map.class);
 

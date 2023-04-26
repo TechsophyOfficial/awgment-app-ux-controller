@@ -2,10 +2,10 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryResponseDTO;
-import com.techsophy.tsf.wrapperservice.dto.TaskHistoryDto;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
 import com.techsophy.tsf.wrapperservice.service.HistoryService;
 import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
@@ -15,15 +15,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.util.List;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GATEWAY_URI_VARIABLE;
@@ -41,6 +34,7 @@ public class HistoryServiceImpl implements HistoryService
     TokenUtils accountUtils;
     ObjectMapper objectMapper;
     GlobalMessageSource globalMessageSource;
+    private final TenantWorkflowResolver tenantWorkflowResolver;
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
 
@@ -49,7 +43,7 @@ public class HistoryServiceImpl implements HistoryService
 
     @Override
     public HistoryResponseDTO historyCount(HistoryDTO historyDTO) throws JsonProcessingException {
-        String url = gatewayURI + camundaServletContextPath + GET_TASK_COUNT_HISTORY;
+        String url = tenantWorkflowResolver.getCamundaPathUri(GET_TASK_COUNT_HISTORY);
         WebClient webClient=webClientWrapper.createWebClient(accountUtils.getTokenFromContext());
         String response = webClientWrapper.webclientRequest(webClient,url,POST,historyDTO);
         if(StringUtils.isNotEmpty(response))

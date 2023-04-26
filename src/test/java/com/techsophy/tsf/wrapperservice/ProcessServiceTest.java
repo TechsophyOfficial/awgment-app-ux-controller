@@ -3,6 +3,7 @@ package com.techsophy.tsf.wrapperservice;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
 import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
@@ -39,6 +40,9 @@ import static org.springframework.http.HttpMethod.POST;
 @ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class ProcessServiceTest {
+
+    @Mock
+    TenantWorkflowResolver tenantWorkflowResolver;
     @Mock
     RestTemplate restTemplate;
     @Mock
@@ -59,6 +63,7 @@ class ProcessServiceTest {
     void setUp() {
         ReflectionTestUtils.setField(processService, "camundaServletContextPath", "http://apigateway.techsophy.com");
         ReflectionTestUtils.setField(processService, "gatewayURI", "http://apigateway.techsophy.com");
+        when(tenantWorkflowResolver.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test
