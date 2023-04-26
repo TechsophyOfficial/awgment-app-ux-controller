@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.constants.MessageConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
@@ -39,7 +39,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class FilterServiceImplTest {
     @Mock
-    CamundaModifiedPathURL camundaModifiedPathURL;
+    TenantWorkflowResolver tenantWorkflowResolver;
     @Mock
     TokenUtils tokenUtils;
     @Mock
@@ -72,7 +72,7 @@ class FilterServiceImplTest {
         filterDTO = new FilterDTO("rType", "name", "owner", Map.of("key", "val"), Map.of("key", "val"));
         id = "id";
         url = gatewayURI + camundaServletContextPath +ENGINE_REST+FILTER+URL_SEPERATOR+id+ MessageConstants.COUNT;
-        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
+        when(tenantWorkflowResolver.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test

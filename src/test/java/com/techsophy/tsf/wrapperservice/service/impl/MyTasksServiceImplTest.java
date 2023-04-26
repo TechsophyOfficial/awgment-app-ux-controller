@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.MyTasksDTO;
 import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.when;
 class MyTasksServiceImplTest {
 
     @Mock
-    CamundaModifiedPathURL camundaModifiedPathURL;
+    TenantWorkflowResolver tenantWorkflowResolver;
     @Mock
     WebClientWrapper webClientWrapper;
     @Mock
@@ -60,7 +60,7 @@ class MyTasksServiceImplTest {
         ReflectionTestUtils.setField(myTasksService, "camundaServletContextPath", "http://apigateway.techsophy.com");
         ReflectionTestUtils.setField(myTasksService, "gatewayURI", "http://apigateway.techsophy.com");
         myTasksDTO = new MyTasksDTO(List.of(Map.of("key", "val")), "assignee");
-        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
+        when(tenantWorkflowResolver.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test

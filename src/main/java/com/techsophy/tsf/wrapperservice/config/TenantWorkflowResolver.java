@@ -9,7 +9,7 @@ import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
 import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.URL_SEPERATOR;
 
 @Component
-public class CamundaModifiedPathURL {
+public class TenantWorkflowResolver {
 
     @Value(GATEWAY_URI_VARIABLE)
     private String gatewayURI;

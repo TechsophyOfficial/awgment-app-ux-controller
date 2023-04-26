@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryResponseDTO;
@@ -34,7 +34,7 @@ public class HistoryServiceImpl implements HistoryService
     TokenUtils accountUtils;
     ObjectMapper objectMapper;
     GlobalMessageSource globalMessageSource;
-    private final CamundaModifiedPathURL camundaModifiedPathURL;
+    private final TenantWorkflowResolver tenantWorkflowResolver;
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
 
@@ -43,7 +43,7 @@ public class HistoryServiceImpl implements HistoryService
 
     @Override
     public HistoryResponseDTO historyCount(HistoryDTO historyDTO) throws JsonProcessingException {
-        String url = camundaModifiedPathURL.getCamundaPathUri(GET_TASK_COUNT_HISTORY);
+        String url = tenantWorkflowResolver.getCamundaPathUri(GET_TASK_COUNT_HISTORY);
         WebClient webClient=webClientWrapper.createWebClient(accountUtils.getTokenFromContext());
         String response = webClientWrapper.webclientRequest(webClient,url,POST,historyDTO);
         if(StringUtils.isNotEmpty(response))

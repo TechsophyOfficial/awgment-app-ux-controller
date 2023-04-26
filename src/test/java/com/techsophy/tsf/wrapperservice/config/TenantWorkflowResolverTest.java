@@ -11,11 +11,11 @@ import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.Mockito.*;
 
-class CamundaModifiedPathURLTest {
+class TenantWorkflowResolverTest {
     @Mock
     TokenUtils tokenUtils;
     @InjectMocks
-    CamundaModifiedPathURL camundaModifiedPathURL;
+    TenantWorkflowResolver tenantWorkflowResolver;
 
     String gatewayURI;
     String relativeUri;
@@ -26,9 +26,9 @@ class CamundaModifiedPathURLTest {
 
         when(tokenUtils.getTokenFromContext()).thenReturn("getTokenFromContextResponse");
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"defaultRealm", "techsophy-platform");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"defaultRealm", "techsophy-platform");
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"gatewayURI","http://localhost:8080");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"gatewayURI","http://localhost:8080");
 
         ReflectionTestUtils.setField(this,"gatewayURI","http://localhost:8080");
 
@@ -38,52 +38,52 @@ class CamundaModifiedPathURLTest {
     @Test
     void testAllServiceMethodsForSharedWorkflowEngine() {
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"sharedWorkflowEngine", "true");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "true");
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"camundaServletContextPath", "/camunda");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/camunda");
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("techsophy-platform");
 
         String expectedOutput = gatewayURI + "/camunda" + relativeUri;
-        String actualOutput = camundaModifiedPathURL.getCamundaPathUri(relativeUri);
+        String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void testAllServiceMethodsForTechsophyPlatformWorkflowEngine() {
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"sharedWorkflowEngine", "false");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "false");
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"camundaServletContextPath", "/camunda");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/camunda");
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("techsophy-platform");
         String expectedOutput = gatewayURI + "/camunda" + relativeUri;
-        String actualOutput = camundaModifiedPathURL.getCamundaPathUri(relativeUri);
+        String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 
     @Test
     void testAllServiceMethodsForMedunitedWorkflowEngine() {
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"sharedWorkflowEngine", "false");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "false");
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"camundaServletContextPath", "/medunited/camunda");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/medunited/camunda");
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("medunited");
         String expectedOutput = gatewayURI + "/medunited/camunda" + relativeUri;
-        String actualOutput = camundaModifiedPathURL.getCamundaPathUri(relativeUri);
+        String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
     @Test
     void testAllServiceMethodsForTrovityWorkflowEngine() {
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"sharedWorkflowEngine", "false");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "false");
 
-        ReflectionTestUtils.setField(camundaModifiedPathURL,"camundaServletContextPath", "/trovity/camunda");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/trovity/camunda");
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("trovity");
         String expectedOutput = gatewayURI + "/trovity/camunda" + relativeUri;
-        String actualOutput = camundaModifiedPathURL.getCamundaPathUri(relativeUri);
+        String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
 }

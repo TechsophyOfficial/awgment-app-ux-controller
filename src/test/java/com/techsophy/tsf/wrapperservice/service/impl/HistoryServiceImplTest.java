@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryResponseDTO;
@@ -32,7 +32,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class HistoryServiceImplTest {
     @Mock
-    CamundaModifiedPathURL camundaModifiedPathURL;
+    TenantWorkflowResolver tenantWorkflowResolver;
     @Mock
     WebClientWrapper webClientWrapper;
     @Mock
@@ -54,7 +54,7 @@ class HistoryServiceImplTest {
     void setUp() {
         ReflectionTestUtils.setField(historyService, "camundaServletContextPath", "http://apigateway.techsophy.com");
         ReflectionTestUtils.setField(historyService, "gatewayURI", "http://apigateway.techsophy.com");
-        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
+        when(tenantWorkflowResolver.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test

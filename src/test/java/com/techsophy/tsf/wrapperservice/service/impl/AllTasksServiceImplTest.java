@@ -2,7 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.techsophy.tsf.wrapperservice.config.CamundaModifiedPathURL;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
@@ -43,7 +43,7 @@ class AllTasksServiceImplTest {
     AllTasksServiceImpl allTasksService;
 
     @Mock
-    CamundaModifiedPathURL camundaModifiedPathURL;
+    TenantWorkflowResolver tenantWorkflowResolver;
 
     AllTasksCountDTO allTasksCountDTO = new AllTasksCountDTO();
 
@@ -53,7 +53,7 @@ class AllTasksServiceImplTest {
         ReflectionTestUtils.setField(allTasksService, "gatewayURI", "http://apigateway.techsophy.com");
         allTasksCountDTO.setActive(true);
         allTasksCountDTO.setSorting(List.of(Map.of("key", "val")));
-        when(camundaModifiedPathURL.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
+        when(tenantWorkflowResolver.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test
