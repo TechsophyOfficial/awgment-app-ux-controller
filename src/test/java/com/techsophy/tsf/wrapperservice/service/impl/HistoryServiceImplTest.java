@@ -2,10 +2,9 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.HistoryDTO;
-import com.techsophy.tsf.wrapperservice.dto.HistoryDataDTO;
-import com.techsophy.tsf.wrapperservice.dto.HistoryDataResponseDTO;
 import com.techsophy.tsf.wrapperservice.dto.HistoryResponseDTO;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
 import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
@@ -26,12 +25,14 @@ import java.util.Map;
 
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.GATEWAY_URI_VARIABLE;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class HistoryServiceImplTest {
+    @Mock
+    TenantWorkflowResolver tenantWorkflowResolver;
     @Mock
     WebClientWrapper webClientWrapper;
     @Mock
@@ -53,6 +54,7 @@ class HistoryServiceImplTest {
     void setUp() {
         ReflectionTestUtils.setField(historyService, "camundaServletContextPath", "http://apigateway.techsophy.com");
         ReflectionTestUtils.setField(historyService, "gatewayURI", "http://apigateway.techsophy.com");
+        when(tenantWorkflowResolver.getCamundaPathUri(anyString())).thenReturn("https://localhost:8080");
     }
 
     @Test

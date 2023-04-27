@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.constants.ApplicationConstants;
 import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
 import com.techsophy.tsf.wrapperservice.dto.ApiResponse;
@@ -42,6 +43,7 @@ public class CommentServiceImpl implements CommentService
     @Value(ApplicationConstants.GATEWAY_URI_VARIABLE)
     private String gatewayURI;
 
+    private final TenantWorkflowResolver tenantWorkflowResolver;
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final ProcessService processService;
@@ -67,7 +69,7 @@ public class CommentServiceImpl implements CommentService
             comment.setTaskId(task.getId());
             comment.setProcessInstanceId(task.getProcessInstanceId());
         }
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.CREATE_COMMENT;
+        String url = tenantWorkflowResolver.getCamundaPathUri(CamundaApiConstants.CREATE_COMMENT);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.add(HttpHeaders.AUTHORIZATION, getBearerToken());
@@ -95,7 +97,7 @@ public class CommentServiceImpl implements CommentService
         {
             throw new IllegalArgumentException(MISSING_MANDATORY_PARAMS);
         }
-        String url = gatewayURI + camundaServletContextPath + CamundaApiConstants.GET_COMMENT;
+        String url = tenantWorkflowResolver.getCamundaPathUri(CamundaApiConstants.GET_COMMENT);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam(PROCESSINSTANCEID, processInstanceId)
                 .queryParam(CASEINSTANCEID,caseInstanceId)

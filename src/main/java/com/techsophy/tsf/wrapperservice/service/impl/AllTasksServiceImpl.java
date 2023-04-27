@@ -2,6 +2,7 @@ package com.techsophy.tsf.wrapperservice.service.impl;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techsophy.tsf.wrapperservice.config.TenantWorkflowResolver;
 import com.techsophy.tsf.wrapperservice.config.GlobalMessageSource;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.InvalidInputException;
@@ -26,6 +27,7 @@ public class AllTasksServiceImpl implements AllTasksService {
     private final TokenUtils tokenUtils;
     private final ObjectMapper objectMapper;
     private final GlobalMessageSource globalMessageSource;
+    private final TenantWorkflowResolver tenantWorkflowResolver;
 
     @Value(CAMUNDA_SERVLET_CONTEXT_PATH_VARIABLE)
     private String camundaServletContextPath;
@@ -34,7 +36,7 @@ public class AllTasksServiceImpl implements AllTasksService {
     private String gatewayURI;
     @Override
     public TaskCountDTO allTasksCount(AllTasksCountDTO allTasksCountDTO) throws JsonProcessingException {
-        String url=gatewayURI+camundaServletContextPath+GET_TASK_COUNT;
+        String url = tenantWorkflowResolver.getCamundaPathUri(GET_TASK_COUNT);
         var webClient=webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,POST, allTasksCountDTO);
         if(response.isBlank())
@@ -45,7 +47,7 @@ public class AllTasksServiceImpl implements AllTasksService {
 
     @Override
     public List<AllTasksDTO> allTasks(AllTasksCountDTO allTasksCountDTO, Integer firstResult, Integer maxResults) throws JsonProcessingException {
-        String url=gatewayURI+camundaServletContextPath+GET_GROUP_TASK+FIRSTRESULT+firstResult+MAXRESULT+maxResults;
+        String url = tenantWorkflowResolver.getCamundaPathUri(GET_GROUP_TASK+FIRSTRESULT+firstResult+MAXRESULT+maxResults);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,POST,allTasksCountDTO);
         if(response.isBlank())
@@ -58,7 +60,7 @@ public class AllTasksServiceImpl implements AllTasksService {
 
     @Override
     public AllTaskCaseInstanceDTO allTaskCaseInstance(String id) throws JsonProcessingException {
-        String url=gatewayURI+camundaServletContextPath+GET_GROUP_TASK_CASEINSTANCE+id+VARIABLES;
+        String url = tenantWorkflowResolver.getCamundaPathUri(GET_GROUP_TASK_CASEINSTANCE+id+VARIABLES);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
         if(response.isBlank())
@@ -71,7 +73,7 @@ public class AllTasksServiceImpl implements AllTasksService {
 
     @Override
     public AllTaskFormsDTO allTaskVariables(String id) throws JsonProcessingException {
-        String url=gatewayURI+camundaServletContextPath+ALLTASK_CASE_INSTANCE+id+VARIABLES;
+        String url = tenantWorkflowResolver.getCamundaPathUri(ALLTASK_CASE_INSTANCE+id+VARIABLES);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
             if(response.isBlank())
@@ -84,7 +86,7 @@ public class AllTasksServiceImpl implements AllTasksService {
 
     @Override
     public AllTaskFormVariablesDTO allTaskFormVariables(String id) throws JsonProcessingException {
-        String url=gatewayURI+camundaServletContextPath+ALLTASK_FORM_VARIABLES+id+FORM_VARIABLE;
+        String url = tenantWorkflowResolver.getCamundaPathUri(ALLTASK_FORM_VARIABLES+id+FORM_VARIABLE);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url,GET,id);
         if(response.isBlank())
@@ -97,7 +99,7 @@ public class AllTasksServiceImpl implements AllTasksService {
 
     @Override
     public List<CaseActivityInstanceDTO> allTaskCaseActivityInstance(String caseInstanceId) throws JsonProcessingException {
-        String url=gatewayURI+camundaServletContextPath+ALLTASK_CASE_ACTIVITY_INSTANCE;
+        String url = tenantWorkflowResolver.getCamundaPathUri(ALLTASK_CASE_ACTIVITY_INSTANCE);
         var webClient =webClientWrapper.createWebClient(tokenUtils.getTokenFromContext());
         String response=webClientWrapper.webclientRequest(webClient,url+ALLTASKCASEINSTANCEID+caseInstanceId,GET,caseInstanceId);
         if(response.isBlank())
