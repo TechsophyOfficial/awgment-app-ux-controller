@@ -9,6 +9,7 @@ import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.*;
 import com.techsophy.tsf.wrapperservice.service.ProcessService;
+import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class ProcessServiceImpl implements ProcessService
     @Value(GATEWAY_URI_VARIABLE)
     private String gatewayURI;
     private final RestTemplate restTemplate;
+    private final TokenUtils  tokenUtils;
     private final TenantWorkflowResolver tenantWorkflowResolver;
     private final ObjectMapper objectMapper;
     private final GlobalMessageSource  globalMessageSource;
@@ -159,6 +161,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public DeployProcessResponseDTO deployProcess(String name, MultipartFile file)
     {
+        String tenantName = tokenUtils.getTenantName().orElseThrow();
         String url = tenantWorkflowResolver.getCamundaPathUri(CamundaApiConstants.DEPLOY_PROCESS);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -173,6 +176,7 @@ public class ProcessServiceImpl implements ProcessService
         LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file",contentsAsResource);
         body.add("deployment-name",name);
+        body.add("tenant-id",tenantName);
         HttpEntity<LinkedMultiValueMap<String, Object>> httpEntity = new HttpEntity<>(body,httpHeaders);
         ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, Object.class);
         ApiResponse<Object> apiResponse = this.objectMapper.convertValue(response.getBody(), ApiResponse.class);
