@@ -67,10 +67,10 @@ class TenantWorkflowResolverTest {
 
         ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "false");
 
-        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/medunited/camunda");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/medunited");
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("medunited");
-        String expectedOutput = gatewayURI + "/medunited/camunda" + relativeUri;
+        String expectedOutput = gatewayURI + "/medunited/medunited" + relativeUri;
         String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
@@ -79,10 +79,10 @@ class TenantWorkflowResolverTest {
 
         ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "false");
 
-        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/trovity/camunda");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/trovity");
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn("trovity");
-        String expectedOutput = gatewayURI + "/trovity/camunda" + relativeUri;
+        String expectedOutput = gatewayURI + "/trovity/trovity" + relativeUri;
         String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
