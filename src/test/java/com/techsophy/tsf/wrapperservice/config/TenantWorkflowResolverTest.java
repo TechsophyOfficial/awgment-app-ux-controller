@@ -38,7 +38,7 @@ class TenantWorkflowResolverTest {
     @Test
     void testAllServiceMethodsForSharedWorkflowEngine() {
 
-        ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "true");
+        ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", "false");
 
         ReflectionTestUtils.setField(tenantWorkflowResolver,"camundaServletContextPath", "/camunda");
 
