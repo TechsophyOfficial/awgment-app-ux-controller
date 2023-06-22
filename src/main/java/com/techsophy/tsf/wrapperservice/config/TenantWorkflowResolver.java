@@ -23,6 +23,10 @@ public class TenantWorkflowResolver {
     TokenUtils tokenUtils;
     public String getCamundaPathUri(String relativeUrl) {
         String tenant = tokenUtils.getIssuerFromToken(tokenUtils.getTokenFromContext());
-        return !defaultRealm.equalsIgnoreCase(tenant) && Boolean.parseBoolean(sharedWorkflowEngine) ? (gatewayURI + URL_SEPERATOR + tenant + camundaServletContextPath + relativeUrl) : gatewayURI + camundaServletContextPath + relativeUrl;
+
+        return (Boolean.parseBoolean(sharedWorkflowEngine)||tenant.equals(defaultRealm))?
+                gatewayURI + camundaServletContextPath + relativeUrl:
+                gatewayURI + URL_SEPERATOR + tenant + camundaServletContextPath + relativeUrl;
+
     }
 }
