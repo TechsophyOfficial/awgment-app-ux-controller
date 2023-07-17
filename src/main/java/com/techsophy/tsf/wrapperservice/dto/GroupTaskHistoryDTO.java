@@ -1,8 +1,13 @@
 package com.techsophy.tsf.wrapperservice.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+
 import java.sql.Time;
 import java.util.Date;
 
+@Data
+@AllArgsConstructor
 public class GroupTaskHistoryDTO {
     private String id;
     private String parentCaseActivityInstanceId;
