@@ -13,10 +13,16 @@ import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import static org.mockito.Mockito.mockStatic;
 import static org.mockito.Mockito.when;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @SpringBootTest
 @ExtendWith({SpringExtension.class})
@@ -26,9 +32,17 @@ class TokenConfigTest {
     @InjectMocks
     TokenConfig tokenConfig;
     @Test
-    void getBearerTokenTest() throws Exception
+    void getBearerTokenTestForException() throws Exception
     {
-        TokenConfig.getBearerToken();
+        ServletRequestAttributes requestAttributes = Mockito.mock(ServletRequestAttributes.class);
+        HttpServletRequest httpServletRequest = Mockito.mock(HttpServletRequest.class);
+        try (MockedStatic<RequestContextHolder> requestContextHolderMockedStatic = Mockito.mockStatic(RequestContextHolder.class)) {
+            requestContextHolderMockedStatic.when(RequestContextHolder::getRequestAttributes).thenReturn(requestAttributes);
+            Mockito.when(requestAttributes.getRequest()).thenReturn(httpServletRequest);
+            Mockito.when(httpServletRequest.getHeader(AUTHORIZATION)).thenReturn("token");
+            String response = TokenConfig.getBearerToken();
+            Assertions.assertNotNull(response);
+        }
     }
     @Test
     void getBearerToken() throws Exception

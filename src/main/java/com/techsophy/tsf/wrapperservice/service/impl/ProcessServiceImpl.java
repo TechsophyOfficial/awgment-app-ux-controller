@@ -24,10 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.techsophy.tsf.wrapperservice.config.TokenConfig.getBearerToken;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
@@ -421,12 +418,11 @@ public class ProcessServiceImpl implements ProcessService
             httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> httpEntity1 = new HttpEntity<>(variable,httpHeaders1);
             ResponseEntity<?> responseEntity1 = restTemplate.exchange(uriComponentsBuilder.toUriString(), HttpMethod.POST, httpEntity1, Object.class);
-            List<Map<String,Object>> responseEntity1Body = (List<Map<String, Object>>) responseEntity1.getBody();
-            Map<String,Object> map2 = responseEntity1Body.get(0);
-            String taskId = map2.get("taskId").toString();
-            //Complete task
-            GenericDTO genericDTO = new GenericDTO(null,taskId,Map.of());
-            this.completeTask(genericDTO);
+
+            Optional<GenericDTO> genericDTOOptional  = Optional.ofNullable((List<Map<String, Object>>) responseEntity1.getBody())
+                    .stream().map(maps -> new GenericDTO(null,maps.get(0).get("taskId").toString(),Map.of())).findFirst();
+
+            this.completeTask(genericDTOOptional.orElseThrow());
         }
         else {
             throw new IllegalArgumentException("Complete all pending item-instances");
