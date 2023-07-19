@@ -9,6 +9,7 @@ import com.techsophy.tsf.wrapperservice.constants.CamundaApiConstants;
 import com.techsophy.tsf.wrapperservice.dto.*;
 import com.techsophy.tsf.wrapperservice.exception.*;
 import com.techsophy.tsf.wrapperservice.service.ProcessService;
+import com.techsophy.tsf.wrapperservice.utils.TokenUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.slf4j.Logger;
@@ -23,10 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.techsophy.tsf.wrapperservice.config.TokenConfig.getBearerToken;
 import static com.techsophy.tsf.wrapperservice.constants.ApplicationConstants.*;
@@ -46,6 +44,7 @@ public class ProcessServiceImpl implements ProcessService
     @Value(GATEWAY_URI_VARIABLE)
     private String gatewayURI;
     private final RestTemplate restTemplate;
+    private final TokenUtils  tokenUtils;
     private final TenantWorkflowResolver tenantWorkflowResolver;
     private final ObjectMapper objectMapper;
     private final GlobalMessageSource  globalMessageSource;
@@ -159,6 +158,7 @@ public class ProcessServiceImpl implements ProcessService
     @SneakyThrows
     public DeployProcessResponseDTO deployProcess(String name, MultipartFile file)
     {
+        String tenantName = tokenUtils.getTenantName().orElseThrow();
         String url = tenantWorkflowResolver.getCamundaPathUri(CamundaApiConstants.DEPLOY_PROCESS);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         HttpHeaders httpHeaders = new HttpHeaders();
@@ -173,6 +173,7 @@ public class ProcessServiceImpl implements ProcessService
         LinkedMultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file",contentsAsResource);
         body.add("deployment-name",name);
+        body.add("tenant-id",tenantName);
         HttpEntity<LinkedMultiValueMap<String, Object>> httpEntity = new HttpEntity<>(body,httpHeaders);
         ResponseEntity<Object> response = restTemplate.exchange(builder.toUriString(), HttpMethod.POST, httpEntity, Object.class);
         ApiResponse<Object> apiResponse = this.objectMapper.convertValue(response.getBody(), ApiResponse.class);
@@ -417,12 +418,11 @@ public class ProcessServiceImpl implements ProcessService
             httpHeaders1.setContentType(MediaType.APPLICATION_JSON);
             HttpEntity<Object> httpEntity1 = new HttpEntity<>(variable,httpHeaders1);
             ResponseEntity<?> responseEntity1 = restTemplate.exchange(uriComponentsBuilder.toUriString(), HttpMethod.POST, httpEntity1, Object.class);
-            List<Map<String,Object>> responseEntity1Body = (List<Map<String, Object>>) responseEntity1.getBody();
-            Map<String,Object> map2 = responseEntity1Body.get(0);
-            String taskId = map2.get("taskId").toString();
-            //Complete task
-            GenericDTO genericDTO = new GenericDTO(null,taskId,Map.of());
-            this.completeTask(genericDTO);
+
+            Optional<GenericDTO> genericDTOOptional  = Optional.ofNullable((List<Map<String, Object>>) responseEntity1.getBody())
+                    .stream().map(maps -> new GenericDTO(null,maps.get(0).get("taskId").toString(),Map.of())).findFirst();
+
+            this.completeTask(genericDTOOptional.orElseThrow());
         }
         else {
             throw new IllegalArgumentException("Complete all pending item-instances");

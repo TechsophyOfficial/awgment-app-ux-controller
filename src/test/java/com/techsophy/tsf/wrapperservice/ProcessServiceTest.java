@@ -194,7 +194,16 @@ class ProcessServiceTest {
                     Map.class))
                     .thenReturn(serviceResponse);
             MultipartFile multipartFile = new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+            Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(userTaskActivityWrapperDTO.toString());
+
+            ArgumentCaptor<String> uriStringCaptor = ArgumentCaptor.forClass(String.class);
+            ArgumentCaptor<HttpMethod> httpMethodCaptor = ArgumentCaptor.forClass(HttpMethod.class);
+            ArgumentCaptor<HttpEntity> httpEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+            ArgumentCaptor<Class> classCaptor = ArgumentCaptor.forClass(Class.class);
             processService.claimTask(userTaskActivityWrapperDTO);
+            Mockito.verify(restTemplate).exchange(
+                    uriStringCaptor.capture(), httpMethodCaptor.capture(), httpEntityCaptor.capture(), classCaptor.capture());
+            Assertions.assertEquals(httpEntityCaptor.getValue().getBody(), userTaskActivityWrapperDTO.toString());
         }
     }
 
@@ -223,7 +232,16 @@ class ProcessServiceTest {
                     Map.class))
                     .thenReturn(serviceResponse);
             MultipartFile multipartFile = new MockMultipartFile("sourceFile.tmp", "Hello World".getBytes());
+            Mockito.when(objectMapper.writeValueAsString(any())).thenReturn(userTaskActivityWrapperDTO.toString());
+
+            ArgumentCaptor<String> uriStringCaptor = ArgumentCaptor.forClass(String.class);
+            ArgumentCaptor<HttpMethod> httpMethodCaptor = ArgumentCaptor.forClass(HttpMethod.class);
+            ArgumentCaptor<HttpEntity> httpEntityCaptor = ArgumentCaptor.forClass(HttpEntity.class);
+            ArgumentCaptor<Class> classCaptor = ArgumentCaptor.forClass(Class.class);
             processService.setAssignee(userTaskActivityWrapperDTO);
+            Mockito.verify(restTemplate).exchange(
+                    uriStringCaptor.capture(), httpMethodCaptor.capture(), httpEntityCaptor.capture(), classCaptor.capture());
+            Assertions.assertEquals(httpEntityCaptor.getValue().getBody(), userTaskActivityWrapperDTO.toString());
         }
     }
 
