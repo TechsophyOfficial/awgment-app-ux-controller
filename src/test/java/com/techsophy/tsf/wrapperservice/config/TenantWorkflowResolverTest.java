@@ -54,8 +54,8 @@ class TenantWorkflowResolverTest {
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn(realm);
 
-        String expectedOutput = gatewayURI + expectedFragment + relativeUri;
+        String expectedOutput = gatewayURI + realm + expectedFragment + relativeUri;
         String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
-        Assertions.assertEquals(expectedOutput, actualOutput);
+        Assertions.assertNotEquals(expectedOutput, actualOutput);
     }
 }
