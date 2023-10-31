@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
+import static com.techsophy.tsf.wrapperservice.constants.MessageConstants.URL_SEPERATOR;
 import static org.mockito.Mockito.*;
 
 class TenantWorkflowResolverTest {
@@ -42,10 +43,9 @@ class TenantWorkflowResolverTest {
     @CsvSource({
             "false,techsophy-platform,/camunda",
             "true,techsophy-platform,/camunda",
-            "false,medunited,/medunited/camunda",
-            "true,medunited,/camunda"
+            "false,medunited,/camunda",
+            "true,medunited,/medunited/camunda"
     })
-
     void testAllServiceMethodsForSharedWorkflowEngine(String shared, String realm,String expectedFragment) {
 
         ReflectionTestUtils.setField(tenantWorkflowResolver,"sharedWorkflowEngine", shared);
@@ -54,7 +54,7 @@ class TenantWorkflowResolverTest {
 
         when(tokenUtils.getIssuerFromToken(anyString())).thenReturn(realm);
 
-        String expectedOutput = gatewayURI + expectedFragment + relativeUri;
+        String expectedOutput = shared.equals("true") ? gatewayURI + expectedFragment + relativeUri : gatewayURI + URL_SEPERATOR + realm + expectedFragment + relativeUri;
         String actualOutput = tenantWorkflowResolver.getCamundaPathUri(relativeUri);
         Assertions.assertEquals(expectedOutput, actualOutput);
     }
