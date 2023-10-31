@@ -26,5 +26,6 @@ public class TenantWorkflowResolver {
         return (Boolean.parseBoolean(sharedWorkflowEngine)&&tenant.equals(defaultRealm))?
                 gatewayURI + camundaServletContextPath + relativeUrl:
                 gatewayURI + URL_SEPERATOR + tenant + camundaServletContextPath + relativeUrl;
+
     }
 }
